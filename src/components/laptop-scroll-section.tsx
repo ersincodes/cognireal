@@ -21,9 +21,10 @@ export default function LaptopScrollSection() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "bottom bottom",
+          end: "+=300%",
           scrub: 1,
           pin: true,
+          pinSpacing: true,
         },
       });
 
@@ -58,26 +59,18 @@ export default function LaptopScrollSection() {
   );
 
   return (
-    <div ref={containerRef} className="h-[400vh] relative bg-background">
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+    <section ref={containerRef} className="relative bg-background">
+      <div className="h-screen w-full overflow-hidden flex flex-col items-center justify-center">
         {/* Laptop Mockup */}
         <div
           ref={laptopRef}
-          className="relative w-[80vw] md:w-[50vw] aspect-[16/10] bg-gray-800 rounded-xl p-[2%] shadow-2xl flex items-center justify-center opacity-0 scale-90 origin-center">
+          className="relative w-[80vw] md:w-[50vw] aspect-16/10 bg-gray-800 rounded-xl p-[2%] shadow-2xl flex items-center justify-center opacity-0 scale-90 origin-center">
           {/* Screen Bezel */}
           <div className="w-full h-full bg-black rounded overflow-hidden relative border border-gray-700">
             {/* Screen Content (Project Screenshot / Background) */}
             <div className="w-full h-full bg-linear-to-br from-[#0f172a] to-[#1e293b] flex items-center justify-center relative">
-              {/* Simulated UI Elements */}
-              <div className="absolute top-4 left-4 right-4 h-4 bg-white/10 rounded-full w-1/3"></div>
-              <div className="absolute top-12 left-4 right-4 bottom-4 bg-white/5 rounded-lg border border-white/10 p-4 grid grid-cols-2 gap-4">
-                <div className="col-span-1 h-20 bg-white/10 rounded"></div>
-                <div className="col-span-1 h-20 bg-white/10 rounded"></div>
-                <div className="col-span-2 h-32 bg-white/10 rounded"></div>
-              </div>
-
               <Image
-                src="/assets/sustainnery.png"
+                src="/assets/prompty-1.png"
                 alt="Sustainnery"
                 width={1500}
                 height={1000}
@@ -104,6 +97,6 @@ export default function LaptopScrollSection() {
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

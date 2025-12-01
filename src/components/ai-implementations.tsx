@@ -32,7 +32,7 @@ export default function AIImplementations() {
   return (
     <section
       ref={containerRef}
-      className="min-h-screen flex items-center justify-end px-4 md:px-20 bg-background overflow-hidden relative">
+      className="min-h-screen flex items-center justify-end px-4 md:px-20 bg-background relative">
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -71,4 +71,3 @@ export default function AIImplementations() {
     </section>
   );
 }
-

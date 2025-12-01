@@ -6,20 +6,22 @@ import Process from "@/components/process";
 import Mission from "@/components/mission";
 import Footer from "@/components/footer";
 import ScrollGuide from "@/components/scroll-guide";
+import WebPagesIntroSection from "@/components/web-pages-intro";
 
 export default function Home() {
   return (
-    <>
-      <main className="flex flex-col min-h-screen overflow-x-hidden">
+    <div className="flex flex-col min-h-screen">
+      <main className="grow">
         <Hero />
+        <WebPagesIntroSection />
         <LaptopScrollSection />
         <AIImplementations />
         <ServicesSnapshot />
         <Process />
         <Mission />
-        <Footer />
       </main>
+      <Footer />
       <ScrollGuide />
-    </>
+    </div>
   );
 }

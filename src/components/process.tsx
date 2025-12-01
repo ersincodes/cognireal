@@ -7,7 +7,7 @@ export default function Process() {
   ];
 
   return (
-    <section className="py-24 px-4 md:px-12 lg:px-24 max-w-7xl mx-auto">
+    <section className="relative z-10 py-24 px-4 md:px-12 lg:px-24 max-w-7xl mx-auto">
       <h2 className="text-4xl md:text-5xl font-bold mb-20 italic">Our process</h2>
       
       <div className="relative border-l-2 border-gray-200 dark:border-gray-800 ml-4 md:ml-0 md:border-l-0 md:grid md:grid-cols-4 md:gap-8">

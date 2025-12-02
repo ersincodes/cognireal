@@ -71,7 +71,7 @@ export default function LaptopScrollSection() {
             {/* Screen Content (Project Screenshot / Background) */}
             <div className="relative flex h-full w-full items-center justify-center bg-linear-to-br from-brand-cyan/40 to-brand-blue/40">
               <Image
-                src="/assets/prompty-1.png"
+                src="/assets/sustainnery-1.png"
                 alt="Featured Cognireal project"
                 width={1500}
                 height={1000}

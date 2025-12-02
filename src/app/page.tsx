@@ -6,6 +6,7 @@ import Process from "@/components/process";
 import Mission from "@/components/mission";
 import Footer from "@/components/footer";
 import ScrollGuide from "@/components/scroll-guide";
+import ServicesGraph from "@/components/services-graph";
 import WebPagesIntroSection from "@/components/web-pages-intro";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <main className="grow">
         <Hero />
+        <ServicesGraph />
         <WebPagesIntroSection />
         <LaptopScrollSection />
         <AIImplementations />

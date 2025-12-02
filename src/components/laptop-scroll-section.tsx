@@ -13,6 +13,7 @@ export default function LaptopScrollSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const laptopRef = useRef<HTMLDivElement>(null);
   const text2Ref = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -37,10 +38,14 @@ export default function LaptopScrollSection() {
       // Zoom Laptop into screen
       // We scale up significantly so the inner screen fills the viewport
       tl.to(laptopRef.current, {
-        scale: 5, // Reduced from 25 to prevent crashing
-        duration: 2,
+        scale: 2, // Increased scale for deeper zoom
+        duration: 1.5, // Reduced duration so section appears earlier
         ease: "power2.inOut",
       });
+
+      // Fade in Black Background
+      // Overlap with end of zoom to transition smoothly
+      tl.to(bgRef.current, { opacity: 1, duration: 0.5 }, "-=0.5");
 
       // 4. Web Apps Section
       // Fade in Text 2 (Overlay)
@@ -77,10 +82,16 @@ export default function LaptopScrollSection() {
           <div className="absolute -bottom-[3%] left-1/2 -translate-x-1/2 w-[15%] h-[2%] bg-gray-600 rounded-b-md"></div>
         </div>
 
+        {/* Background Overlay */}
+        <div
+          ref={bgRef}
+          className="absolute inset-0 bg-black z-10 pointer-events-none opacity-0"
+        />
+
         {/* Section 4 Content: Web Applications */}
         <div
           ref={text2Ref}
-          className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none opacity-0 bg-black/70">
+          className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none opacity-0">
           <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 text-center px-4">
             WEB APPLICATIONS
           </h2>

@@ -9,15 +9,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 const WebPagesIntroSection = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const headingRef = useRef<HTMLHeadingElement | null>(null);
-  const subheadingRef = useRef<HTMLParagraphElement | null>(null);
+  const labelRef = useRef<HTMLParagraphElement | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const descRef = useRef<HTMLParagraphElement | null>(null);
+  const calloutRef = useRef<HTMLHeadingElement | null>(null);
 
   useGSAP(
     () => {
       if (
         !sectionRef.current ||
-        !headingRef.current ||
-        !subheadingRef.current
+        !labelRef.current ||
+        !titleRef.current ||
+        !descRef.current ||
+        !calloutRef.current
       ) {
         return;
       }
@@ -25,30 +29,50 @@ const WebPagesIntroSection = () => {
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 75%",
+          start: "top 80%",
           end: "bottom 60%",
           toggleActions: "play none none reverse",
         },
       });
 
-      timeline.from(headingRef.current, {
-        opacity: 0,
-        x: -40,
-        duration: 0.8,
-        ease: "power3.out",
-      });
-
-      timeline.from(
-        subheadingRef.current,
-        {
+      timeline
+        .from(labelRef.current, {
           opacity: 0,
           y: 20,
-          rotation: -2,
-          duration: 0.7,
-          ease: "back.out(1.7)",
-        },
-        "-=0.3"
-      );
+          duration: 0.6,
+          ease: "power2.out",
+        })
+        .from(
+          titleRef.current,
+          {
+            opacity: 0,
+            y: 40,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+          "-=0.4"
+        )
+        .from(
+          descRef.current,
+          {
+            opacity: 0,
+            y: 20,
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.6"
+        )
+        .from(
+          calloutRef.current,
+          {
+            opacity: 0,
+            scale: 0.9,
+            x: 20,
+            duration: 0.8,
+            ease: "back.out(1.7)",
+          },
+          "-=0.4"
+        );
     },
     { scope: sectionRef }
   );
@@ -56,29 +80,33 @@ const WebPagesIntroSection = () => {
   return (
     <section
       ref={sectionRef}
-      id="services"
-      className="flex w-full justify-center bg-transparent px-4 py-20 text-brand-dark">
-      <div className="grid w-full max-w-5xl gap-10 rounded-[32px] border border-white/60 bg-white/80 p-10 shadow-[0_25px_70px_rgba(6,7,11,0.08)] backdrop-blur-xl md:grid-cols-[1.3fr_0.7fr]">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.4em] text-brand-muted">
-            We design
+      className="relative flex w-full justify-center bg-white px-6 py-32 lg:px-12">
+      <div className="relative w-full max-w-[1400px]">
+        <div className="flex flex-col items-start">
+          <p
+            ref={labelRef}
+            className="text-sm font-medium uppercase tracking-widest text-gray-600 md:text-base">
+            WE DESIGN
           </p>
           <h2
-            ref={headingRef}
-            className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
-            Web pages that make operations feel modern and intuitive.
+            ref={titleRef}
+            className="mt-2 text-6xl font-black uppercase tracking-tight text-black md:text-8xl">
+            WEB PAGES
           </h2>
           <p
-            ref={subheadingRef}
-            className="mt-6 max-w-xl text-lg text-brand-muted">
-            From foundational corporate sites to high-converting sales funnels,
-            every screen respects your workflow and brand.
+            ref={descRef}
+            className="mt-6 max-w-2xl text-xl leading-relaxed text-gray-500 md:text-2xl">
+            Modern, fast, mobile-ready websites for businesses that want to look
+            professional.
           </p>
         </div>
 
-        <div className="relative flex items-end justify-end">
-          <div className="h-48 w-32 rounded-[26px] bg-brand-blue shadow-[0_25px_60px_rgba(56,88,255,0.5)]" />
-          <div className="absolute -left-12 top-6 h-32 w-32 rounded-[26px] border border-brand-cyan/40 bg-brand-cyan/40 shadow-inner" />
+        <div className="mt-16 flex justify-end md:mt-32">
+          <h3
+            ref={calloutRef}
+            className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-4xl font-bold uppercase text-transparent md:text-6xl">
+            (LIKE THIS ONE)
+          </h3>
         </div>
       </div>
     </section>

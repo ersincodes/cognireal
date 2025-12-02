@@ -12,7 +12,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function LaptopScrollSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const laptopRef = useRef<HTMLDivElement>(null);
-  const text1Ref = useRef<HTMLDivElement>(null);
   const text2Ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -28,14 +27,9 @@ export default function LaptopScrollSection() {
         },
       });
 
-      // 1. Initial State: Laptop hidden, Text 1 hidden
-
-      // 2. Fade In Laptop and Text 1
-      tl.to(laptopRef.current, { opacity: 1, scale: 1, duration: 1 }).to(
-        text1Ref.current,
-        { opacity: 1, y: 0, duration: 1 },
-        "<"
-      );
+      // 1. Initial State: Laptop hidden
+      // 2. Fade In Laptop
+      tl.to(laptopRef.current, { opacity: 1, scale: 1, duration: 1 });
 
       // Hold for a bit
       tl.to({}, { duration: 0.5 });
@@ -43,7 +37,7 @@ export default function LaptopScrollSection() {
       // Zoom Laptop into screen
       // We scale up significantly so the inner screen fills the viewport
       tl.to(laptopRef.current, {
-        scale: 25,
+        scale: 5, // Reduced from 25 to prevent crashing
         duration: 2,
         ease: "power2.inOut",
       });
@@ -64,7 +58,7 @@ export default function LaptopScrollSection() {
         {/* Laptop Mockup */}
         <div
           ref={laptopRef}
-          className="relative w-[80vw] md:w-[50vw] aspect-16/10 bg-gray-800 rounded-xl p-[2%] shadow-2xl flex items-center justify-center opacity-0 scale-90 origin-center">
+          className="will-change-transform relative w-[80vw] md:w-[50vw] aspect-16/10 bg-gray-800 rounded-xl p-[2%] shadow-2xl flex items-center justify-center opacity-0 scale-90 origin-center">
           {/* Screen Bezel */}
           <div className="w-full h-full bg-black rounded overflow-hidden relative border border-gray-700">
             {/* Screen Content (Project Screenshot / Background) */}

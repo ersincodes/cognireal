@@ -104,7 +104,7 @@ const WebPagesIntroSection = () => {
         <div className="mt-16 flex justify-end md:mt-32">
           <h3
             ref={calloutRef}
-            className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-4xl font-bold uppercase text-transparent md:text-6xl">
+            className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-2xl font-bold uppercase text-transparent md:text-4xl">
             (LIKE THIS ONE)
           </h3>
         </div>

@@ -89,7 +89,7 @@ const ScrollGuide = () => {
       aria-label={ariaLabel}
       onClick={handleScrollAction}
       onKeyDown={handleKeyDown}
-      className="fixed bottom-6 right-6 z-50 flex items-center rounded-full border border-white/30 bg-gradient-to-r from-brand-cyan/80 to-brand-blue/80 px-4 py-2 text-xs text-white shadow-[0_10px_35px_rgba(56,88,255,0.4)] backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white focus-visible:ring-offset-brand-dark md:text-sm">
+      className="fixed bottom-6 right-6 z-50 flex items-center rounded-full border cursor-pointer border-brand-dark/20 bg-brand-dark/80 px-4 py-2 text-xs text-white shadow-lg backdrop-blur-md transition hover:bg-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-dark md:text-sm">
       <span className="mr-2 tracking-[0.2em] uppercase">{labelText}</span>
       {scrollGuideState.isAtBottom ? (
         <ArrowUp className="h-4 w-4" aria-hidden="true" />

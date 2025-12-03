@@ -97,13 +97,13 @@ export default function LaptopScrollSection() {
             Web applications
           </h2>
           <p className="max-w-3xl text-lg text-white/80 md:text-2xl">
-            Custom tools that automate workflows and make complex operations
-            effortless for your teams.
+            Customed web tools that optimize operations, automate workflows, and
+            bring clarity to your processes.
           </p>
           <Link
             href="#process"
-            className="pointer-events-auto rounded-full bg-white/95 px-10 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-brand-dark transition hover:bg-white">
-            See our recent launch
+            className="pointer-events-auto rounded-full bg-gradient-to-r from-brand-blue to-brand-cyan px-10 py-4 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:opacity-90 hover:shadow-lg hover:shadow-brand-cyan/30">
+            See a real case
           </Link>
         </div>
       </div>

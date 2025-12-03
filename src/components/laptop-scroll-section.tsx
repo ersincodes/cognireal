@@ -28,12 +28,11 @@ export default function LaptopScrollSection() {
         },
       });
 
-      // 1. Initial State: Laptop hidden
-      // 2. Fade In Laptop
-      tl.to(laptopRef.current, { opacity: 1, scale: 1, duration: 1 });
+      // 1. Fade In Laptop quickly (starts immediately)
+      tl.to(laptopRef.current, { opacity: 1, scale: 1, duration: 0.3 });
 
       // Hold for a bit
-      tl.to({}, { duration: 0.5 });
+      tl.to({}, { duration: 0.3 });
 
       // Zoom Laptop into screen
       // We scale up significantly so the inner screen fills the viewport
@@ -57,12 +56,12 @@ export default function LaptopScrollSection() {
   return (
     <section
       ref={containerRef}
-      className="relative bg-linear-to-b from-brand-card to-brand-dark text-white shadow-[0_2px_0_0_#020205]">
+      className="relative bg-brand-dark text-white shadow-[0_2px_0_0_#020205]">
       <div className="flex h-screen w-full flex-col items-center justify-center overflow-hidden">
         {/* Laptop Mockup */}
         <div
           ref={laptopRef}
-          className="will-change-transform relative aspect-16/10 w-[80vw] origin-center scale-90 rounded-3xl bg-brand-dark/80 p-[2%] opacity-0 shadow-[0_60px_120px_rgba(0,0,0,0.45)] transition md:w-[50vw]">
+          className="will-change-transform relative aspect-16/10 w-[80vw] origin-center scale-90 rounded-3xl bg-brand-dark/80 p-[2%] opacity-30 shadow-[0_60px_120px_rgba(0,0,0,0.45)] transition md:w-[50vw]">
           {/* Screen Bezel */}
           <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/5 bg-black">
             {/* Screen Content (Project Screenshot / Background) */}

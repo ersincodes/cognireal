@@ -11,21 +11,22 @@ const steps = [
   {
     title: "Discover",
     description:
-      "Assess operations, map workflows, and identify the high-impact wins.",
+      "We analyze your business, workflows, and goals: where you are now and where you want to go.",
   },
   {
     title: "Design",
     description:
-      "Blueprint UX, technical architecture, and how teams will actually adopt it.",
+      "We design the right UX, architecture, and systems, tailored to your teams and operations.",
   },
   {
     title: "Develop",
     description:
-      "Ship performant, secure software with integrated AI experiences.",
+      "We build and integrate everything with modern technologies, keeping your operation running.",
   },
   {
     title: "Launch",
-    description: "Onboard teams, transition smoothly, and stay on as partners.",
+    description:
+      "We launch, train your team, adjust, and stay as your long-term digital partner.",
   },
 ];
 
@@ -63,7 +64,7 @@ export default function ServicesSnapshot() {
   return (
     <section
       ref={sectionRef}
-      id="process"
+      id="services"
       className="relative z-10 flex justify-center bg-brand-card px-4 py-24 text-brand-dark">
       <div className="w-full max-w-5xl">
         <p className="text-sm font-semibold uppercase tracking-[0.4em] text-brand-muted">

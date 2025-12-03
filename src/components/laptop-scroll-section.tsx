@@ -101,7 +101,8 @@ export default function LaptopScrollSection() {
             bring clarity to your processes.
           </p>
           <Link
-            href="#process"
+            id="work"
+            href="#work"
             className="pointer-events-auto rounded-full bg-gradient-to-r from-brand-blue to-brand-cyan px-10 py-4 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:opacity-90 hover:shadow-lg hover:shadow-brand-cyan/30">
             See a real case
           </Link>

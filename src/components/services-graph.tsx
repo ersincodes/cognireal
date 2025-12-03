@@ -179,7 +179,7 @@ const ServicesGraph = () => {
             alt="Cognireal"
             width={80}
             height={80}
-            className="relative h-12 w-auto object-contain"
+            className="relative h-12 w-auto mix-blend-multiply object-contain"
           />
         </div>
 

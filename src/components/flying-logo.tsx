@@ -124,7 +124,7 @@ const FlyingLogo = () => {
         width={260}
         height={260}
         priority
-        className="h-full w-full object-contain drop-shadow-[0_20px_50px_rgba(39,73,199,0.35)]"
+        className="h-full w-full mix-blend-multiply object-contain drop-shadow-[0_20px_50px_rgba(39,73,199,0.35)]"
       />
     </div>
   );

@@ -84,7 +84,7 @@ export default function Hero() {
             width={260}
             height={260}
             priority
-            className={`h-full w-full drop-shadow-[0_40px_80px_rgba(39,73,199,0.35)] transition-opacity duration-300 ${
+            className={`h-full w-full mix-blend-multiply drop-shadow-[0_40px_80px_rgba(39,73,199,0.35)] transition-opacity duration-300 ${
               logoVisible ? "opacity-100" : "opacity-0"
             }`}
           />

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Cognireal",
   description:
-    "HoloBit is a web design and development company that helps businesses create modern, fast, mobile-ready websites that look professional and perform well.",
+    "Cognireal is a web design and development company that helps businesses create modern, fast, mobile-ready websites that look professional and perform well.",
 };
 
 export default function RootLayout({

@@ -69,8 +69,8 @@ export default function LaptopScrollSection() {
               <Image
                 src="/assets/sustainnery-1.png"
                 alt="Featured Cognireal project"
-                width={1500}
-                height={1000}
+                width={1200}
+                height={800}
                 className="h-full w-full object-cover"
               />
             </div>

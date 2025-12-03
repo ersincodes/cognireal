@@ -43,3 +43,8 @@ body {
 *::selection {
   background: color-mix(in srgb, var(--brand-blue) 30%, transparent);
 }
+
+/* Fix for GSAP ScrollTrigger pin-spacer showing white background */
+.pin-spacer {
+  background-color: var(--brand-dark) !important;
+}

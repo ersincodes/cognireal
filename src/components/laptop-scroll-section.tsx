@@ -61,7 +61,7 @@ export default function LaptopScrollSection() {
         {/* Laptop Mockup */}
         <div
           ref={laptopRef}
-          className="will-change-transform relative aspect-16/10 w-[80vw] origin-center scale-90 rounded-3xl bg-brand-dark/80 p-[2%] opacity-30 shadow-[0_60px_120px_rgba(0,0,0,0.45)] transition md:w-[50vw]">
+          className="will-change-transform relative aspect-16/10 w-[80vw] origin-center scale-90 rounded-3xl border-white/5 bg-gray-500 p-[0.5%] opacity-30 shadow-[0_60px_120px_rgba(0,0,0,0.45)] transition md:w-[50vw]">
           {/* Screen Bezel */}
           <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/5 bg-black">
             {/* Screen Content (Project Screenshot / Background) */}
@@ -76,8 +76,8 @@ export default function LaptopScrollSection() {
             </div>
           </div>
           {/* Laptop Base (simplified) */}
-          <div className="absolute -bottom-[3%] left-1/2 -translate-x-1/2 w-[120%] h-[3%] bg-gray-700 rounded-b-xl shadow-lg"></div>
-          <div className="absolute -bottom-[3%] left-1/2 -translate-x-1/2 w-[15%] h-[2%] bg-gray-600 rounded-b-md"></div>
+          <div className="absolute -bottom-[3%] left-1/2 -translate-x-1/2 w-[115%] h-[3%] bg-gray-400 rounded-b-xl shadow-lg"></div>
+          <div className="absolute -bottom-[3%] left-1/2 -translate-x-1/2 w-[15%] h-[2%] bg-gray-500 rounded-b-md"></div>
         </div>
 
         {/* Background Overlay */}

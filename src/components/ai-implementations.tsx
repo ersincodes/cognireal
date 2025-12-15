@@ -54,10 +54,10 @@ export default function AIImplementations() {
           {/* Try a demo button */}
           <Link
             href="#demo"
-            className="mt-8 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-4 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="mt-8 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
             aria-label="Try a demo"
             tabIndex={0}>
-            Try a demo
+            Try a Demo
           </Link>
         </div>
       </div>

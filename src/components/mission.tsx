@@ -13,8 +13,8 @@ export default function Mission() {
         </p>
         <Link
           href="#footer"
-          className="mt-10 inline-flex items-center rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-12 py-4 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-[0_20px_60px_rgba(56,88,255,0.45)] transition hover:shadow-[0_25px_70px_rgba(56,88,255,0.6)]">
-          Book a discovery call
+          className="mt-8 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+          Book a Discovery Call
         </Link>
       </div>
     </section>

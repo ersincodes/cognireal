@@ -94,7 +94,7 @@ export default function LaptopScrollSection() {
             We build
           </p>
           <h2 className="text-5xl font-semibold leading-tight text-white md:text-7xl">
-            Web applications
+            Web Applications
           </h2>
           <p className="max-w-3xl text-lg text-white/80 md:text-2xl">
             Customed web tools that optimize operations, automate workflows, and
@@ -103,8 +103,8 @@ export default function LaptopScrollSection() {
           <Link
             id="work"
             href="#work"
-            className="pointer-events-auto rounded-full bg-gradient-to-r from-brand-blue to-brand-cyan px-10 py-4 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:opacity-90 hover:shadow-lg hover:shadow-brand-cyan/30">
-            See a real case
+            className="mt-8 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+            See a Real Case
           </Link>
         </div>
       </div>

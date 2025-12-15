@@ -38,9 +38,9 @@ const Navbar = () => {
 
         <Link
           href="#footer"
-          className="inline-flex items-center rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-5 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-white transition hover:shadow-[0_20px_60px_rgba(56,88,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-blue"
+          className="mt-0 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-2 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           aria-label="Schedule a call">
-          Book a call
+          Book a Call
         </Link>
       </nav>
     </header>

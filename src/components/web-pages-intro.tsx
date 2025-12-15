@@ -1,9 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { MousePointerClick } from "lucide-react";
+import Modal from "./modal";
+import BeforeAfterSlider from "./before-after-slider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +16,15 @@ const WebPagesIntroSection = () => {
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const descRef = useRef<HTMLParagraphElement | null>(null);
   const calloutRef = useRef<HTMLHeadingElement | null>(null);
+  const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
+
+  const handleOpenComparisonModal = () => {
+    setIsComparisonModalOpen(true);
+  };
+
+  const handleCloseComparisonModal = () => {
+    setIsComparisonModalOpen(false);
+  };
 
   useGSAP(
     () => {
@@ -102,13 +114,30 @@ const WebPagesIntroSection = () => {
         </div>
 
         <div className="mt-16 flex justify-end md:mt-32">
-          <h3
-            ref={calloutRef}
-            className="bg-gradient-to-r from-cyan-400 to-blue-600 bg-clip-text text-2xl font-bold uppercase text-transparent md:text-4xl">
-            (LIKE THIS ONE)
-          </h3>
+          <button
+            type="button"
+            aria-label="Open website before and after comparison"
+            onClick={handleOpenComparisonModal}
+            className="mt-0 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2">
+            <span>Like This One</span>
+            <MousePointerClick className="h-5 w-5" aria-hidden="true" />
+          </button>
         </div>
       </div>
+
+      <Modal
+        isOpen={isComparisonModalOpen}
+        title="Before & After"
+        description="Drag the handle to compare the original vs updated website."
+        onClose={handleCloseComparisonModal}>
+        <BeforeAfterSlider
+          beforeImageSrc="/assets/website-slider/before.png"
+          afterImageSrc="/assets/website-slider/after.jpeg"
+          beforeLabel="Before"
+          afterLabel="After"
+          initialPositionPercent={50}
+        />
+      </Modal>
     </section>
   );
 };

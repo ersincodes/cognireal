@@ -17,19 +17,40 @@ export default function LaptopScrollSection() {
   const bgRef = useRef<HTMLDivElement>(null);
   const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
   const [showAfter, setShowAfter] = useState(false);
+  const [isBeforeVisible, setIsBeforeVisible] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
+  const beforeTimerRef = useRef<number | null>(null);
 
   const handleOpenCaseModal = () => {
+    if (beforeTimerRef.current) {
+      window.clearTimeout(beforeTimerRef.current);
+    }
     setIsCaseModalOpen(true);
     setShowAfter(false);
+    setIsBeforeVisible(false);
+    setIsConverting(false);
+    beforeTimerRef.current = window.setTimeout(
+      () => setIsBeforeVisible(true),
+      40
+    );
   };
 
   const handleCloseCaseModal = () => {
+    if (beforeTimerRef.current) {
+      window.clearTimeout(beforeTimerRef.current);
+    }
     setIsCaseModalOpen(false);
     setShowAfter(false);
+    setIsBeforeVisible(false);
+    setIsConverting(false);
   };
 
   const handleShowAfter = () => {
-    setShowAfter(true);
+    setIsConverting(true);
+    window.setTimeout(() => {
+      setShowAfter(true);
+      setIsConverting(false);
+    }, 320);
   };
 
   useGSAP(
@@ -137,8 +158,17 @@ export default function LaptopScrollSection() {
         onClose={handleCloseCaseModal}>
         <div className="mx-auto flex max-w-5xl flex-col gap-6">
           {!showAfter ? (
-            <div className="relative overflow-hidden rounded-2xl border border-black/5 bg-white shadow-xl">
-              <div className="absolute inset-0 z-10 bg-linear-to-b from-transparent via-white/10 to-white/30 pointer-events-none" />
+            <div
+              className={`relative overflow-hidden rounded-2xl border border-black/5 bg-white shadow-xl transition-all duration-500 ${
+                isBeforeVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-3 opacity-0"
+              } ${
+                isConverting
+                  ? "scale-[1.01] shadow-[0_24px_70px_rgba(59,130,246,0.18)]"
+                  : ""
+              }`}>
+              <div className="pointer-events-none absolute inset-0 z-10 bg-linear-to-b from-transparent via-white/10 to-white/30" />
               <div className="flex items-center justify-between px-6 py-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
@@ -151,9 +181,10 @@ export default function LaptopScrollSection() {
                 <button
                   type="button"
                   onClick={handleShowAfter}
-                  className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:scale-[1.02] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
+                  disabled={isConverting}
+                  className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:scale-[1.02] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-80"
                   aria-label="Convert to interactive table">
-                  Convert
+                  {isConverting ? "Converting..." : "Convert"}
                 </button>
               </div>
               <div className="relative h-[60vh] min-h-[360px] w-full bg-gray-50">
@@ -161,7 +192,7 @@ export default function LaptopScrollSection() {
                   src="/assets/webapp-slider/before-2.png"
                   alt="Legacy spreadsheet interface before redesign"
                   fill
-                  className="object-contain object-top"
+                  className="object-contain object-top transition-all duration-700 ease-out"
                   priority
                 />
               </div>

@@ -1,12 +1,15 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { GripVertical } from "lucide-react";
 
 type BeforeAfterSliderProps = {
-  beforeImageSrc: string;
-  afterImageSrc: string;
+  beforeImageSrc?: string;
+  afterImageSrc?: string;
+  beforeContent?: ReactNode;
+  afterContent?: ReactNode;
   beforeLabel?: string;
   afterLabel?: string;
   initialPositionPercent?: number;
@@ -19,6 +22,8 @@ const clamp = (value: number, min: number, max: number) =>
 const BeforeAfterSlider = ({
   beforeImageSrc,
   afterImageSrc,
+  beforeContent,
+  afterContent,
   beforeLabel = "Before",
   afterLabel = "After",
   initialPositionPercent = 50,
@@ -95,6 +100,35 @@ const BeforeAfterSlider = ({
     setSliderPositionPercent(clamp(initialPositionPercent, 0, 100));
   }, [initialPositionPercent]);
 
+  const renderImage = (src: string, alt: string) => (
+    <div className="relative h-full w-full">
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        draggable={false}
+        quality={92}
+        sizes="(min-width: 1024px) 960px, 100vw"
+        className="object-contain object-center"
+      />
+    </div>
+  );
+
+  const resolvedAfter = afterContent
+    ? afterContent
+    : afterImageSrc
+    ? renderImage(afterImageSrc, afterLabel)
+    : null;
+  const resolvedBefore = beforeContent
+    ? beforeContent
+    : beforeImageSrc
+    ? renderImage(beforeImageSrc, beforeLabel)
+    : null;
+
+  if (!resolvedAfter || !resolvedBefore) {
+    return null;
+  }
+
   return (
     <div className={`w-full ${className ?? ""}`}>
       <div
@@ -108,10 +142,6 @@ const BeforeAfterSlider = ({
         aria-valuenow={Math.round(sliderPositionPercent)}
         aria-valuetext={ariaValueText}
         onKeyDown={handleKeyDown}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
         className="relative w-full cursor-ew-resize select-none touch-none overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-black/10 outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 sm:rounded-2xl">
         <div className="relative aspect-16/10 w-full bg-linear-to-b from-slate-50 to-slate-100">
           <div
@@ -120,15 +150,9 @@ const BeforeAfterSlider = ({
           />
 
           <div className="absolute inset-0">
-            <Image
-              src={afterImageSrc}
-              alt={afterLabel}
-              fill
-              draggable={false}
-              quality={92}
-              sizes="(min-width: 1024px) 960px, 100vw"
-              className="object-contain object-center"
-            />
+            <div className="relative flex h-full w-full items-stretch justify-stretch">
+              {resolvedAfter}
+            </div>
           </div>
 
           <div className="pointer-events-none absolute top-3 right-3 z-20 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg ring-1 ring-white/20 backdrop-blur sm:top-4 sm:right-4 sm:px-4 sm:py-2 sm:text-sm">
@@ -139,15 +163,9 @@ const BeforeAfterSlider = ({
             className="absolute inset-0 overflow-hidden"
             style={{ clipPath, willChange: "clip-path" }}>
             <div className="absolute inset-0">
-              <Image
-                src={beforeImageSrc}
-                alt={beforeLabel}
-                fill
-                draggable={false}
-                quality={92}
-                sizes="(min-width: 1024px) 960px, 100vw"
-                className="object-contain object-center"
-              />
+              <div className="relative flex h-full w-full items-stretch justify-stretch">
+                {resolvedBefore}
+              </div>
             </div>
 
             <div className="pointer-events-none absolute top-3 left-3 z-20 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg ring-1 ring-white/20 backdrop-blur sm:top-4 sm:left-4 sm:px-4 sm:py-2 sm:text-sm">
@@ -161,7 +179,20 @@ const BeforeAfterSlider = ({
             style={{
               left: `${sliderPositionPercent}%`,
               transform: "translateX(-50%)",
+            }}></div>
+          <div
+            role="presentation"
+            aria-hidden="true"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            className="absolute top-0 bottom-0 z-20 w-12 cursor-ew-resize"
+            style={{
+              left: `${sliderPositionPercent}%`,
+              transform: "translateX(-50%)",
             }}>
+            <div className="absolute top-0 bottom-0 left-1/2 w-px -translate-x-1/2 bg-linear-to-b from-white/0 via-brand-blue to-white/0 sm:w-0.5" />
             <div className="absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 shadow-xl ring-1 ring-black/10 backdrop-blur sm:h-12 sm:w-12">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-blue shadow-sm ring-1 ring-white/30 sm:h-9 sm:w-9">
                 <GripVertical className="h-4 w-4 text-white sm:h-5 sm:w-5" />

@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
 import Image from "next/image";
+import Modal from "./modal";
+import ImmersiveDataTable from "./immersive-data-table";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +15,22 @@ export default function LaptopScrollSection() {
   const laptopRef = useRef<HTMLDivElement>(null);
   const text2Ref = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const [isCaseModalOpen, setIsCaseModalOpen] = useState(false);
+  const [showAfter, setShowAfter] = useState(false);
+
+  const handleOpenCaseModal = () => {
+    setIsCaseModalOpen(true);
+    setShowAfter(false);
+  };
+
+  const handleCloseCaseModal = () => {
+    setIsCaseModalOpen(false);
+    setShowAfter(false);
+  };
+
+  const handleShowAfter = () => {
+    setShowAfter(true);
+  };
 
   useGSAP(
     () => {
@@ -89,7 +106,7 @@ export default function LaptopScrollSection() {
         {/* Section 4 Content: Web Applications */}
         <div
           ref={text2Ref}
-          className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-6 text-center opacity-0">
+          className="pointer-events-auto absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-6 text-center opacity-0">
           <p className="text-sm font-semibold uppercase tracking-[0.4em] text-white/70">
             We build
           </p>
@@ -100,14 +117,86 @@ export default function LaptopScrollSection() {
             Customed web tools that optimize operations, automate workflows, and
             bring clarity to your processes.
           </p>
-          <Link
-            id="work"
-            href="#work"
-            className="mt-8 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+          <button
+            type="button"
+            aria-label="See a real case web app transformation"
+            onClick={handleOpenCaseModal}
+            className="mt-8 cursor-pointer inline-block rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2">
             See a Real Case
-          </Link>
+          </button>
         </div>
       </div>
+      <Modal
+        isOpen={isCaseModalOpen}
+        title="Dynamic Data Table"
+        description={
+          showAfter
+            ? "Explore the interactive data table we built from the legacy sheet."
+            : "Review the legacy spreadsheet, then convert it into an interactive table."
+        }
+        onClose={handleCloseCaseModal}>
+        <div className="mx-auto flex max-w-5xl flex-col gap-6">
+          {!showAfter ? (
+            <div className="relative overflow-hidden rounded-2xl border border-black/5 bg-white shadow-xl">
+              <div className="absolute inset-0 z-10 bg-linear-to-b from-transparent via-white/10 to-white/30 pointer-events-none" />
+              <div className="flex items-center justify-between px-6 py-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+                    Before
+                  </p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    Legacy Spreadsheet
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleShowAfter}
+                  className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:scale-[1.02] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
+                  aria-label="Convert to interactive table">
+                  Convert
+                </button>
+              </div>
+              <div className="relative h-[60vh] min-h-[360px] w-full bg-gray-50">
+                <Image
+                  src="/assets/webapp-slider/before-2.png"
+                  alt="Legacy spreadsheet interface before redesign"
+                  fill
+                  className="object-contain object-top"
+                  priority
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-black/5 bg-white shadow-xl">
+              <div className="flex items-center justify-between px-6 py-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+                    After
+                  </p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    Interactive Data Table
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
+                    Converted
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowAfter(false)}
+                    className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
+                    aria-label="Back to legacy view">
+                    Back to Legacy
+                  </button>
+                </div>
+              </div>
+              <div className="h-[65vh] min-h-[420px] overflow-hidden rounded-b-2xl bg-gray-50">
+                <ImmersiveDataTable className="h-full w-full" />
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
     </section>
   );
 }

@@ -142,6 +142,10 @@ const BeforeAfterSlider = ({
         aria-valuenow={Math.round(sliderPositionPercent)}
         aria-valuetext={ariaValueText}
         onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
         className="relative w-full cursor-ew-resize select-none touch-none overflow-hidden rounded-xl bg-white shadow-xl ring-1 ring-black/10 outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 sm:rounded-2xl">
         <div className="relative aspect-16/10 w-full bg-linear-to-b from-slate-50 to-slate-100">
           <div
@@ -155,7 +159,8 @@ const BeforeAfterSlider = ({
             </div>
           </div>
 
-          <div className="pointer-events-none absolute top-3 right-3 z-20 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg ring-1 ring-white/20 backdrop-blur sm:top-4 sm:right-4 sm:px-4 sm:py-2 sm:text-sm">
+          <div
+            className={`pointer-events-none absolute top-3 right-3 z-20 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg ring-1 ring-white/20 backdrop-blur transition-opacity duration-300 sm:top-4 sm:right-4 sm:px-4 sm:py-2 sm:text-sm`}>
             {afterLabel}
           </div>
 
@@ -168,7 +173,8 @@ const BeforeAfterSlider = ({
               </div>
             </div>
 
-            <div className="pointer-events-none absolute top-3 left-3 z-20 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg ring-1 ring-white/20 backdrop-blur sm:top-4 sm:left-4 sm:px-4 sm:py-2 sm:text-sm">
+            <div
+              className={`pointer-events-none absolute top-3 left-3 z-20 rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold tracking-wide text-white shadow-lg ring-1 ring-white/20 backdrop-blur transition-opacity duration-300 sm:top-4 sm:left-4 sm:px-4 sm:py-2 sm:text-sm`}>
               {beforeLabel}
             </div>
           </div>
@@ -183,10 +189,6 @@ const BeforeAfterSlider = ({
           <div
             role="presentation"
             aria-hidden="true"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
             className="absolute top-0 bottom-0 z-20 w-12 cursor-ew-resize"
             style={{
               left: `${sliderPositionPercent}%`,

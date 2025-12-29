@@ -47,9 +47,12 @@ const ServicesGraph = () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top 80%",
-          end: "bottom 20%",
-          toggleActions: "play none none reverse",
+          start: "top top",
+          end: "+=100%",
+          scrub: 1,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
         },
       });
 
@@ -63,16 +66,15 @@ const ServicesGraph = () => {
         gsap.set(paths, { strokeDasharray: 1000, strokeDashoffset: 1000 });
       }
 
-      // Animation Sequence - logo animation removed since flying logo handles it
+      // Animation Sequence
       tl.to(
         paths!,
         {
           strokeDashoffset: 0,
           duration: 1.5,
-          ease: "power3.inOut",
-          stagger: 0.1,
+          ease: "none",
         },
-        "+=0.3"
+        "+=0.2"
       ).to(
         nodes,
         {
@@ -80,11 +82,11 @@ const ServicesGraph = () => {
           y: 0,
           scale: 1,
           duration: 0.6,
-          stagger: 0.15,
+          stagger: 0.2,
           ease: "back.out(1.7)",
         },
-        "-=1.0"
-      );
+        "-=0.8"
+      ).to({}, { duration: 0.5 }); // Hold end state
     },
     { scope: containerRef }
   );
@@ -93,10 +95,10 @@ const ServicesGraph = () => {
     <section
       id="services-graph"
       ref={containerRef}
-      className="relative flex justify-center overflow-hidden bg-gradient-to-b from-[#f0f2fa] via-[#e8ebf8] to-[#f7f8fc] px-4 py-8 md:py-12">
+      className="relative flex h-screen w-full flex-col justify-center overflow-hidden bg-gradient-to-b from-[#f0f2fa] via-[#e8ebf8] to-[#f7f8fc] px-4">
       {/* Subtle top divider line */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
-      <div className="relative flex w-full max-w-6xl flex-col items-center overflow-hidden p-8 md:h-[450px] md:p-0">
+      <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center md:h-[450px]">
         {/* SVG Lines Layer (Desktop) */}
         <svg
           ref={linesRef}

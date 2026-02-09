@@ -6,8 +6,7 @@ import {
   RATE_LIMIT_ERROR,
   convertToGeminiFormat,
   buildGeminiRequestBody,
-  getGeminiApiUrl,
-  extractGeminiResponse,
+  getGeminiStreamUrl,
   isOutOfScopeResponse,
 } from "@/lib/chat";
 import {
@@ -78,8 +77,8 @@ export async function POST(request: NextRequest) {
     // Build request body
     const requestBody = buildGeminiRequestBody(systemPrompt, geminiContents);
 
-    // Call Gemini API
-    const response = await fetch(getGeminiApiUrl(apiKey), {
+    // Call Gemini API with streaming
+    const response = await fetch(getGeminiStreamUrl(apiKey), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestBody),
@@ -102,20 +101,109 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const data = await response.json();
-    const { message: assistantMessage, blockedBySafety } = extractGeminiResponse(data);
+    // Create a streaming response
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body?.getReader();
+        if (!reader) {
+          controller.close();
+          return;
+        }
 
-    // Handle safety-blocked responses
-    if (blockedBySafety) {
-      return NextResponse.json({ message: OUT_OF_SCOPE_REFUSAL });
-    }
+        const decoder = new TextDecoder();
+        let fullMessage = "";
+        let buffer = "";
 
-    // Server-side validation: enforce exact refusal message for out-of-scope responses
-    if (isOutOfScopeResponse(assistantMessage) && assistantMessage !== OUT_OF_SCOPE_REFUSAL) {
-      return NextResponse.json({ message: OUT_OF_SCOPE_REFUSAL });
-    }
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-    return NextResponse.json({ message: assistantMessage });
+            buffer += decoder.decode(value, { stream: true });
+
+            // Gemini SSE format: "data: {json}\r\n\r\n" or "data: {json}\n\n"
+            // Split by double newline to get complete SSE events
+            const events = buffer.split(/\r?\n\r?\n/);
+            buffer = events.pop() || ""; // Keep incomplete event in buffer
+
+            for (const event of events) {
+              const trimmedEvent = event.trim();
+              if (!trimmedEvent) continue;
+
+              // Extract JSON from "data: {json}" format
+              let jsonStr = trimmedEvent;
+              if (trimmedEvent.startsWith("data:")) {
+                jsonStr = trimmedEvent.slice(5).trim();
+              }
+
+              if (!jsonStr) continue;
+
+              try {
+                const data = JSON.parse(jsonStr);
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                
+                if (text) {
+                  fullMessage += text;
+                  // Send the chunk to the client
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: text })}\n\n`));
+                }
+
+                // Check for safety block
+                if (!text && data.candidates?.[0]?.finishReason === "SAFETY") {
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: OUT_OF_SCOPE_REFUSAL, replace: true })}\n\n`));
+                  fullMessage = OUT_OF_SCOPE_REFUSAL;
+                }
+              } catch {
+                // Skip invalid JSON lines
+              }
+            }
+          }
+
+          // Process any remaining buffer
+          if (buffer.trim()) {
+            let jsonStr = buffer.trim();
+            if (jsonStr.startsWith("data:")) {
+              jsonStr = jsonStr.slice(5).trim();
+            }
+            
+            if (jsonStr) {
+              try {
+                const data = JSON.parse(jsonStr);
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                if (text) {
+                  fullMessage += text;
+                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: text })}\n\n`));
+                }
+              } catch {
+                // Skip invalid JSON
+              }
+            }
+          }
+
+          // Check for out-of-scope response and replace if needed
+          if (isOutOfScopeResponse(fullMessage) && fullMessage !== OUT_OF_SCOPE_REFUSAL) {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: OUT_OF_SCOPE_REFUSAL, replace: true })}\n\n`));
+          }
+
+          // Send done signal
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`));
+        } catch (error) {
+          console.error("Streaming error:", error);
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: "Stream interrupted" })}\n\n`));
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
   } catch (error) {
     console.error("Chat API error:", error);
     return NextResponse.json(

@@ -13,6 +13,7 @@ export interface ChatMessage {
   content: string;
   timestamp: number;
   feedback?: "up" | "down" | null;
+  isStreaming?: boolean;
 }
 
 export interface ChatApiRequest {

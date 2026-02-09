@@ -48,3 +48,37 @@ body {
 .pin-spacer {
   background-color: var(--brand-dark) !important;
 }
+
+/* Typing indicator animation */
+@keyframes typing-pulse {
+  0%,
+  60%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.typing-dot {
+  animation: typing-pulse 1.4s ease-in-out infinite;
+}
+
+/* Typing cursor animation */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.typing-cursor {
+  animation: blink 1s step-end infinite;
+}

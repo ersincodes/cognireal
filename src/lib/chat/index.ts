@@ -9,6 +9,7 @@ export {
   convertToGeminiFormat,
   buildGeminiRequestBody,
   getGeminiApiUrl,
+  getGeminiStreamUrl,
   extractGeminiResponse,
   isOutOfScopeResponse,
   OUT_OF_SCOPE_INDICATORS,

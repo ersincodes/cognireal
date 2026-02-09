@@ -1,5 +1,10 @@
 // Chat message types for the AI chatbot
 
+import type { WizardAnswer, WizardState } from "./wizard";
+
+// Re-export wizard types for convenience
+export type { WizardOption, WizardQuestion, WizardAnswer, WizardState } from "./wizard";
+
 export type MessageRole = "user" | "assistant" | "system";
 
 export interface ChatMessage {
@@ -12,6 +17,7 @@ export interface ChatMessage {
 
 export interface ChatApiRequest {
   messages: Pick<ChatMessage, "role" | "content">[];
+  wizardContext?: WizardAnswer[];
 }
 
 export interface ChatApiResponse {
@@ -24,6 +30,7 @@ export interface ChatState {
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
+  wizardState: WizardState;
 }
 
 export interface ChatContextValue extends ChatState {
@@ -33,6 +40,8 @@ export interface ChatContextValue extends ChatState {
   closeChat: () => void;
   clearChat: () => void;
   setFeedback: (messageId: string, feedback: "up" | "down" | null) => void;
+  answerWizardQuestion: (answerId: string, customValue?: string) => void;
+  resetWizard: () => void;
 }
 
 // Rate limiting types

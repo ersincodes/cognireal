@@ -10,11 +10,14 @@ const ChatWidget = () => {
     isOpen,
     isLoading,
     error,
+    wizardState,
     toggleChat,
     closeChat,
     sendMessage,
     clearChat,
     setFeedback,
+    answerWizardQuestion,
+    resetWizard,
   } = useChatContext();
 
   return (
@@ -24,10 +27,13 @@ const ChatWidget = () => {
         messages={messages}
         isLoading={isLoading}
         error={error}
+        wizardState={wizardState}
         onClose={closeChat}
         onSendMessage={sendMessage}
         onClearChat={clearChat}
         onFeedback={setFeedback}
+        onAnswerWizard={answerWizardQuestion}
+        onResetWizard={resetWizard}
       />
       <ChatButton isOpen={isOpen} onClick={toggleChat} />
     </>

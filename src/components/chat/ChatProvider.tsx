@@ -13,12 +13,21 @@ import type {
   ChatContextValue,
   ChatApiRequest,
   ChatApiResponse,
+  WizardState,
+  WizardAnswer,
 } from "@/types/chat";
+import { WIZARD_QUESTIONS } from "@/lib/wizard";
 
-const STORAGE_KEY = "cognireal-chat-messages";
+const STORAGE_KEY = "cognireal-chat-data";
 
 const generateId = (): string => {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+};
+
+const initialWizardState: WizardState = {
+  isComplete: false,
+  currentStep: 0,
+  answers: [],
 };
 
 const ChatContext = createContext<ChatContextValue | null>(null);
@@ -35,36 +44,51 @@ interface ChatProviderProps {
   children: ReactNode;
 }
 
+interface StoredChatData {
+  messages: ChatMessage[];
+  wizardState: WizardState;
+}
+
 export const ChatProvider = ({ children }: ChatProviderProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [wizardState, setWizardState] = useState<WizardState>(initialWizardState);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load messages from localStorage on mount
+  // Load data from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored) as ChatMessage[];
-        setMessages(parsed);
+        const parsed = JSON.parse(stored) as StoredChatData;
+        if (parsed.messages) {
+          setMessages(parsed.messages);
+        }
+        if (parsed.wizardState) {
+          setWizardState(parsed.wizardState);
+        }
       }
     } catch (e) {
-      console.warn("Failed to load chat history from localStorage:", e);
+      console.warn("Failed to load chat data from localStorage:", e);
     }
     setIsHydrated(true);
   }, []);
 
-  // Save messages to localStorage when they change
+  // Save data to localStorage when they change
   useEffect(() => {
     if (!isHydrated) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      const dataToStore: StoredChatData = {
+        messages,
+        wizardState,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
     } catch (e) {
-      console.warn("Failed to save chat history to localStorage:", e);
+      console.warn("Failed to save chat data to localStorage:", e);
     }
-  }, [messages, isHydrated]);
+  }, [messages, wizardState, isHydrated]);
 
   const toggleChat = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -82,6 +106,37 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   }, []);
 
   const clearChat = useCallback(() => {
+    setMessages([]);
+    setWizardState(initialWizardState);
+    setError(null);
+  }, []);
+
+  const answerWizardQuestion = useCallback(
+    (answerId: string, customValue?: string) => {
+      const currentQuestion = WIZARD_QUESTIONS[wizardState.currentStep];
+      if (!currentQuestion) return;
+
+      const answer: WizardAnswer = {
+        questionId: currentQuestion.id,
+        answerId,
+        customValue,
+      };
+
+      const newAnswers = [...wizardState.answers, answer];
+      const nextStep = wizardState.currentStep + 1;
+      const isComplete = nextStep >= WIZARD_QUESTIONS.length;
+
+      setWizardState({
+        isComplete,
+        currentStep: nextStep,
+        answers: newAnswers,
+      });
+    },
+    [wizardState.currentStep, wizardState.answers]
+  );
+
+  const resetWizard = useCallback(() => {
+    setWizardState(initialWizardState);
     setMessages([]);
     setError(null);
   }, []);
@@ -124,6 +179,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
       const requestBody: ChatApiRequest = {
         messages: apiMessages,
+        wizardContext: wizardState.answers,
       };
 
       const response = await fetch("/api/chat", {
@@ -156,19 +212,22 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     } finally {
       setIsLoading(false);
     }
-  }, [messages]);
+  }, [messages, wizardState.answers]);
 
   const value: ChatContextValue = {
     messages,
     isOpen,
     isLoading,
     error,
+    wizardState,
     sendMessage,
     toggleChat,
     openChat,
     closeChat,
     clearChat,
     setFeedback,
+    answerWizardQuestion,
+    resetWizard,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

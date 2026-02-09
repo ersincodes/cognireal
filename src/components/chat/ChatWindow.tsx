@@ -1,64 +1,69 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import { X, Send, Trash2 } from "lucide-react";
-import type { ChatMessage as ChatMessageType } from "@/types/chat";
+import { X, Send, Trash2, RotateCcw } from "lucide-react";
+import type { ChatMessage as ChatMessageType, WizardState } from "@/types/chat";
 import ChatMessage from "./ChatMessage";
 import TypingIndicator from "./TypingIndicator";
+import WizardMessage from "./WizardMessage";
+import {
+  WIZARD_QUESTIONS,
+  WIZARD_INTRO_MESSAGE,
+  generateCompletionMessage,
+  getAnswerLabel,
+} from "@/lib/wizard";
 
 interface ChatWindowProps {
   isOpen: boolean;
   messages: ChatMessageType[];
   isLoading: boolean;
   error: string | null;
+  wizardState: WizardState;
   onClose: () => void;
   onSendMessage: (content: string) => Promise<void>;
   onClearChat: () => void;
   onFeedback: (messageId: string, feedback: "up" | "down" | null) => void;
+  onAnswerWizard: (answerId: string, customValue?: string) => void;
+  onResetWizard: () => void;
 }
-
-const WELCOME_MESSAGE = `Hello! I'm your Business Analyst Assistant, specializing in plastic manufacturing operations.
-
-I can help you with:
-• **OEE optimization** and scrap reduction
-• **Digital transformation** roadmaps
-• **MES/ERP/APS** system guidance
-• **AI/ML applications** for manufacturing
-• Process improvement strategies
-
-How can I assist you today?`;
 
 const ChatWindow = ({
   isOpen,
   messages,
   isLoading,
   error,
+  wizardState,
   onClose,
   onSendMessage,
   onClearChat,
   onFeedback,
+  onAnswerWizard,
+  onResetWizard,
 }: ChatWindowProps) => {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  const isWizardComplete = wizardState.isComplete;
+  const currentQuestion = WIZARD_QUESTIONS[wizardState.currentStep];
+
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages or wizard step changes
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isLoading, scrollToBottom]);
+  }, [messages, isLoading, wizardState.currentStep, scrollToBottom]);
 
-  // Focus input when chat opens
+  // Focus input when chat opens and wizard is complete
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && isWizardComplete) {
       setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
     }
-  }, [isOpen]);
+  }, [isOpen, isWizardComplete]);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -83,16 +88,57 @@ const ChatWindow = ({
     e.target.style.height = `${Math.min(e.target.scrollHeight, 120)}px`;
   };
 
-  // Create display messages including welcome message
-  const displayMessages: ChatMessageType[] = [
-    {
-      id: "welcome",
+  // Build display messages based on wizard state
+  const buildDisplayMessages = (): ChatMessageType[] => {
+    const displayMessages: ChatMessageType[] = [];
+
+    // Always show intro message first
+    displayMessages.push({
+      id: "wizard-intro",
       role: "assistant",
-      content: WELCOME_MESSAGE,
+      content: WIZARD_INTRO_MESSAGE,
       timestamp: 0,
-    },
-    ...messages,
-  ];
+    });
+
+    // Show answered questions as conversation
+    wizardState.answers.forEach((answer, index) => {
+      const question = WIZARD_QUESTIONS[index];
+      if (question) {
+        // Show question as assistant message
+        displayMessages.push({
+          id: `wizard-q-${index}`,
+          role: "assistant",
+          content: question.question,
+          timestamp: index + 1,
+        });
+        // Show answer as user message
+        displayMessages.push({
+          id: `wizard-a-${index}`,
+          role: "user",
+          content: getAnswerLabel(answer.questionId, answer.answerId, answer.customValue),
+          timestamp: index + 2,
+        });
+      }
+    });
+
+    // If wizard is complete, show completion message and chat messages
+    if (isWizardComplete) {
+      displayMessages.push({
+        id: "wizard-complete",
+        role: "assistant",
+        content: generateCompletionMessage(wizardState.answers),
+        timestamp: 100,
+      });
+      // Add actual chat messages
+      messages.forEach((msg) => {
+        displayMessages.push(msg);
+      });
+    }
+
+    return displayMessages;
+  };
+
+  const displayMessages = buildDisplayMessages();
 
   if (!isOpen) return null;
 
@@ -109,9 +155,22 @@ const ChatWindow = ({
           <h2 className="text-base font-semibold text-white">
             Business Analyst Assistant
           </h2>
-          <p className="text-xs text-white/80">Plastic Manufacturing Expert</p>
+          <p className="text-xs text-white/80">
+            {isWizardComplete ? "Ready to help" : "Getting to know you"}
+          </p>
         </div>
         <div className="flex items-center gap-2">
+          {isWizardComplete && (
+            <button
+              onClick={onResetWizard}
+              className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
+              aria-label="Change context"
+              title="Change context"
+              tabIndex={0}
+            >
+              <RotateCcw className="h-4 w-4" />
+            </button>
+          )}
           <button
             onClick={onClearChat}
             className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
@@ -139,12 +198,22 @@ const ChatWindow = ({
               key={message.id}
               message={message}
               onFeedback={
-                message.role === "assistant" && message.id !== "welcome"
+                message.role === "assistant" &&
+                !message.id.startsWith("wizard-")
                   ? (feedback) => onFeedback(message.id, feedback)
                   : undefined
               }
             />
           ))}
+          {/* Show current wizard question if not complete */}
+          {!isWizardComplete && currentQuestion && (
+            <WizardMessage
+              question={currentQuestion}
+              currentStep={wizardState.currentStep}
+              totalSteps={WIZARD_QUESTIONS.length}
+              onAnswer={onAnswerWizard}
+            />
+          )}
           {isLoading && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>
@@ -157,32 +226,40 @@ const ChatWindow = ({
         </div>
       )}
 
-      {/* Input area */}
-      <form
-        onSubmit={handleSubmit}
-        className="flex items-end gap-2 border-t border-gray-100 bg-gray-50 px-4 py-3"
-      >
-        <textarea
-          ref={inputRef}
-          value={inputValue}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask about plastic manufacturing..."
-          className="max-h-[120px] min-h-[44px] flex-1 resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-dark placeholder:text-gray-400 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue"
-          rows={1}
-          disabled={isLoading}
-          aria-label="Type your message"
-        />
-        <button
-          type="submit"
-          disabled={!inputValue.trim() || isLoading}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-blue text-white transition-all hover:bg-brand-blue/90 disabled:cursor-not-allowed disabled:opacity-50"
-          aria-label="Send message"
-          tabIndex={0}
+      {/* Input area - only show when wizard is complete */}
+      {isWizardComplete ? (
+        <form
+          onSubmit={handleSubmit}
+          className="flex items-end gap-2 border-t border-gray-100 bg-gray-50 px-4 py-3"
         >
-          <Send className="h-5 w-5" />
-        </button>
-      </form>
+          <textarea
+            ref={inputRef}
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask your question..."
+            className="max-h-[120px] min-h-[44px] flex-1 resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-dark placeholder:text-gray-400 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue"
+            rows={1}
+            disabled={isLoading}
+            aria-label="Type your message"
+          />
+          <button
+            type="submit"
+            disabled={!inputValue.trim() || isLoading}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-blue text-white transition-all hover:bg-brand-blue/90 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label="Send message"
+            tabIndex={0}
+          >
+            <Send className="h-5 w-5" />
+          </button>
+        </form>
+      ) : (
+        <div className="border-t border-gray-100 bg-gray-50 px-4 py-3">
+          <p className="text-center text-xs text-gray-500">
+            Please answer the questions above to continue
+          </p>
+        </div>
+      )}
     </div>
   );
 };

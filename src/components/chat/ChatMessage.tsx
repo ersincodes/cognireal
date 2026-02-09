@@ -11,6 +11,9 @@ interface ChatMessageProps {
 const ChatMessage = ({ message, onFeedback }: ChatMessageProps) => {
   const isUser = message.role === "user";
   const isAssistant = message.role === "assistant";
+  const isStreaming = message.isStreaming && isAssistant;
+  const content = message.content || "";
+  const hasContent = content.length > 0;
 
   const handleFeedbackClick = (feedback: "up" | "down") => {
     if (!onFeedback) return;
@@ -53,15 +56,37 @@ const ChatMessage = ({ message, onFeedback }: ChatMessageProps) => {
             isUser
               ? "rounded-br-md bg-brand-blue text-white"
               : "rounded-bl-md bg-gray-100 text-brand-dark"
-          }`}
+          } ${isStreaming && !hasContent ? "min-h-[40px] min-w-[60px]" : ""}`}
         >
-          <p className="whitespace-pre-wrap text-sm leading-relaxed">
-            {message.content}
-          </p>
+          {isStreaming && !hasContent ? (
+            // Show typing dots when streaming but no content yet
+            <div className="flex items-center justify-center gap-1.5 py-1">
+              <span
+                className="typing-dot h-2 w-2 rounded-full bg-gray-400"
+                style={{ animationDelay: "0ms" }}
+              />
+              <span
+                className="typing-dot h-2 w-2 rounded-full bg-gray-400"
+                style={{ animationDelay: "160ms" }}
+              />
+              <span
+                className="typing-dot h-2 w-2 rounded-full bg-gray-400"
+                style={{ animationDelay: "320ms" }}
+              />
+              <span className="sr-only">Assistant is typing...</span>
+            </div>
+          ) : (
+            <p className="whitespace-pre-wrap text-sm leading-relaxed">
+              {content}
+              {isStreaming && hasContent && (
+                <span className="typing-cursor ml-0.5 inline-block h-4 w-0.5 bg-brand-dark align-middle" />
+              )}
+            </p>
+          )}
         </div>
 
-        {/* Feedback buttons for assistant messages */}
-        {isAssistant && onFeedback && (
+        {/* Feedback buttons for assistant messages - only show when not streaming and has content */}
+        {isAssistant && onFeedback && !isStreaming && hasContent && (
           <div className="flex gap-1 px-1">
             <button
               onClick={() => handleFeedbackClick("up")}

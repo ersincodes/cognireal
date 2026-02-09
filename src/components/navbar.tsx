@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const navItems = [
-  { label: "Work", href: "#work" },
+  { label: "Work", href: "#services-graph" },
   { label: "Services", href: "#services" },
   { label: "Contact", href: "#footer" },
 ];

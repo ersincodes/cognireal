@@ -96,6 +96,14 @@ export const getGeminiApiUrl = (apiKey: string): string => {
 };
 
 /**
+ * Get the Gemini API URL for streaming responses.
+ */
+export const getGeminiStreamUrl = (apiKey: string): string => {
+  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+  return `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+};
+
+/**
  * Extract the assistant message from Gemini response.
  */
 export const extractGeminiResponse = (data: {

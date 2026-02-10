@@ -5,11 +5,13 @@ import Navbar from "./navbar";
 import { useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [logoVisible, setLogoVisible] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const heroSection = document.getElementById("hero");
@@ -80,7 +82,7 @@ export default function Hero() {
           aria-hidden="true">
           <Image
             src="/assets/logo-hero-1.png"
-            alt="Cognireal icon"
+            alt={t("hero.iconAlt")}
             width={260}
             height={260}
             priority
@@ -92,10 +94,10 @@ export default function Hero() {
 
         <div className="space-y-4">
           <h1 className="text-3xl font-black uppercase leading-tight tracking-[0.08em] md:text-5xl">
-            The digital transformation
+            {t("hero.heading")}
           </h1>
           <p className="text-base text-brand-muted md:text-xl">
-            that respects your operation and upgrades your business
+            {t("hero.subheading")}
           </p>
         </div>
       </div>

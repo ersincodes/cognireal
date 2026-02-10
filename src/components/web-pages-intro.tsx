@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { MousePointerClick } from "lucide-react";
 import Modal from "./modal";
 import BeforeAfterSlider from "./before-after-slider";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +19,7 @@ const WebPagesIntroSection = () => {
   const descRef = useRef<HTMLParagraphElement | null>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
   const [isComparisonModalOpen, setIsComparisonModalOpen] = useState(false);
+  const { t } = useLanguage();
 
   const handleOpenComparisonModal = () => {
     setIsComparisonModalOpen(true);
@@ -78,18 +80,17 @@ const WebPagesIntroSection = () => {
           <p
             ref={labelRef}
             className="text-sm font-medium uppercase tracking-widest text-gray-600 md:text-base">
-            WE DESIGN
+            {t("webPages.label")}
           </p>
           <h2
             ref={titleRef}
             className="mt-2 text-6xl font-black uppercase tracking-tight text-black md:text-8xl">
-            WEB PAGES
+            {t("webPages.heading")}
           </h2>
           <p
             ref={descRef}
             className="mt-6 max-w-2xl text-xl leading-relaxed text-gray-500 md:text-2xl">
-            Modern, fast, mobile-ready websites for businesses that want to look
-            professional.
+            {t("webPages.description")}
           </p>
         </div>
 
@@ -99,7 +100,7 @@ const WebPagesIntroSection = () => {
             aria-label="Open website before and after comparison"
             onClick={handleOpenComparisonModal}
             className="mt-0 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2">
-            <span>Like This One</span>
+            <span>{t("webPages.button")}</span>
             <MousePointerClick className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
@@ -107,14 +108,14 @@ const WebPagesIntroSection = () => {
 
       <Modal
         isOpen={isComparisonModalOpen}
-        title="Before & After"
-        description="Drag the handle to compare the original vs updated website."
+        title={t("webPages.modal.title")}
+        description={t("webPages.modal.description")}
         onClose={handleCloseComparisonModal}>
         <BeforeAfterSlider
           beforeImageSrc="/assets/website-slider/before.png"
           afterImageSrc="/assets/website-slider/after.jpeg"
-          beforeLabel="Before"
-          afterLabel="After"
+          beforeLabel={t("webPages.modal.before")}
+          afterLabel={t("webPages.modal.after")}
           initialPositionPercent={50}
         />
       </Modal>

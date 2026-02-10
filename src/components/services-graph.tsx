@@ -6,6 +6,7 @@ import { Globe, Settings, BrainCircuit } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,6 +18,7 @@ const ServicesGraph = () => {
   const aiRef = useRef<HTMLDivElement>(null);
   const linesRef = useRef<SVGSVGElement>(null);
   const [logoVisible, setLogoVisible] = useState(false);
+  const { t } = useLanguage();
 
   // Effect to show logo when flying logo animation completes
   useEffect(() => {
@@ -196,7 +198,7 @@ const ServicesGraph = () => {
                 <Globe className="h-9 w-9 text-blue-600" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">Web Design</h3>
+                <h3 className="text-lg font-bold text-slate-800">{t("servicesGraph.webDesign")}</h3>
               </div>
             </div>
           </div>
@@ -214,7 +216,7 @@ const ServicesGraph = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-800">
-                  AI Solutions
+                  {t("servicesGraph.aiSolutions")}
                 </h3>
               </div>
             </div>
@@ -232,7 +234,7 @@ const ServicesGraph = () => {
                 />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">Web Apps</h3>
+                <h3 className="text-lg font-bold text-slate-800">{t("servicesGraph.webApps")}</h3>
               </div>
             </div>
           </div>

@@ -1,0 +1,208 @@
+{
+  "metadata": {
+    "title": "Cognireal",
+    "description": "Cognireal es una empresa de diseño y desarrollo web que ayuda a las empresas a crear sitios web modernos, rápidos y adaptados a móviles que lucen profesionales y funcionan bien."
+  },
+  "navbar": {
+    "work": "Trabajo",
+    "services": "Servicios",
+    "contact": "Contacto",
+    "bookCall": "Reservar Llamada",
+    "logoAlt": "Logo de Cognireal"
+  },
+  "hero": {
+    "heading": "La transformación digital",
+    "subheading": "que respeta tu operación y mejora tu negocio",
+    "iconAlt": "Icono de Cognireal"
+  },
+  "servicesGraph": {
+    "webDesign": "Diseño Web",
+    "aiSolutions": "Soluciones IA",
+    "webApps": "Aplicaciones Web"
+  },
+  "webPages": {
+    "label": "DISEÑAMOS",
+    "heading": "PÁGINAS WEB",
+    "description": "Sitios web modernos, rápidos y adaptados a móviles para empresas que quieren lucir profesionales.",
+    "button": "Como Esta",
+    "modal": {
+      "title": "Antes y Después",
+      "description": "Arrastra el control para comparar el sitio web original vs actualizado.",
+      "before": "Antes",
+      "after": "Después",
+      "helper": "Arrastra para comparar, o usa las teclas de flecha mientras está enfocado (Shift para pasos más grandes)."
+    }
+  },
+  "aiSystems": {
+    "label": "IMPLEMENTAMOS",
+    "heading": "SISTEMAS IA",
+    "description": "Reportes automatizados, chatbots inteligentes y sistemas de automatización personalizados que mejoran cómo funciona tu negocio.",
+    "button": "Probar Demo"
+  },
+  "webApps": {
+    "label": "Construimos",
+    "heading": "Aplicaciones Web",
+    "description": "Herramientas web personalizadas que optimizan operaciones, automatizan flujos de trabajo y aportan claridad a tus procesos.",
+    "button": "Ver Caso Real",
+    "modal": {
+      "title": "Tabla de Datos Dinámica",
+      "descriptionBefore": "Revisa la hoja de cálculo heredada, luego conviértela en una tabla interactiva.",
+      "descriptionAfter": "Explora la tabla de datos interactiva que construimos desde la hoja heredada.",
+      "before": "Antes",
+      "after": "Después",
+      "legacySpreadsheet": "Hoja de Cálculo Heredada",
+      "interactiveTable": "Tabla de Datos Interactiva",
+      "converted": "Convertido",
+      "convert": "Convertir",
+      "converting": "Convirtiendo...",
+      "backToLegacy": "Volver al Original"
+    }
+  },
+  "servicesSnapshot": {
+    "label": "Nuestro proceso",
+    "heading": "Desde la primera llamada hasta una asociación continua.",
+    "step": "Paso",
+    "steps": {
+      "discover": {
+        "title": "Descubrir",
+        "description": "Analizamos tu negocio, flujos de trabajo y objetivos: dónde estás ahora y hacia dónde quieres ir."
+      },
+      "design": {
+        "title": "Diseñar",
+        "description": "Diseñamos la UX, arquitectura y sistemas correctos, adaptados a tus equipos y operaciones."
+      },
+      "develop": {
+        "title": "Desarrollar",
+        "description": "Construimos e integramos todo con tecnologías modernas, manteniendo tu operación funcionando."
+      },
+      "launch": {
+        "title": "Lanzar",
+        "description": "Lanzamos, capacitamos a tu equipo, ajustamos y permanecemos como tu socio digital a largo plazo."
+      }
+    }
+  },
+  "process": {
+    "text": "En Cognireal, ayudamos a las empresas a modernizarse, optimizarse y operar de manera más inteligente con soluciones digitales que realmente funcionan en el mundo real."
+  },
+  "mission": {
+    "heading": "¿Listo para transformar tu negocio?",
+    "description": "Comparte tus desafíos actuales y te responderemos con un plan en menos de 48 horas.",
+    "button": "Reservar Llamada de Descubrimiento"
+  },
+  "footer": {
+    "copyright": "© {year} Cognireal. Todos los derechos reservados.",
+    "linkedin": "LinkedIn",
+    "twitter": "Twitter",
+    "instagram": "Instagram"
+  },
+  "scrollGuide": {
+    "scrollToExplore": "Desplázate para explorar",
+    "scrollToTop": "Volver arriba",
+    "ariaExplore": "Desplázate hacia abajo para explorar más contenido",
+    "ariaTop": "Volver al inicio de la página"
+  },
+  "modal": {
+    "close": "Cerrar modal"
+  },
+  "chat": {
+    "title": "Asistente de Análisis de Negocios",
+    "statusReady": "Listo para ayudar",
+    "statusOnboarding": "Conociéndote",
+    "placeholder": "Haz tu pregunta...",
+    "footerText": "Por favor responde las preguntas anteriores para continuar",
+    "changeContext": "Cambiar contexto",
+    "clearHistory": "Borrar historial del chat",
+    "closeChat": "Cerrar chat",
+    "sendMessage": "Enviar mensaje"
+  },
+  "wizard": {
+    "intro": "¡Bienvenido! Soy tu Asistente de Análisis de Negocios de Cognireal.\n\nPara brindarte la orientación más relevante, me gustaría conocer un poco sobre tu negocio. Comencemos con algunas preguntas rápidas.",
+    "stepProgress": "Paso {current} de {total}",
+    "customInputLabel": "Por favor especifica tu industria:",
+    "customInputPlaceholder": "Ingresa tu industria...",
+    "continue": "Continuar",
+    "backToOptions": "← Volver a opciones",
+    "questions": {
+      "industry": {
+        "question": "¿En qué industria opera tu negocio?",
+        "options": {
+          "manufacturing": "Manufactura",
+          "healthcare": "Salud",
+          "retail": "Retail / Comercio Electrónico",
+          "finance": "Finanzas / Banca",
+          "technology": "Tecnología / SaaS",
+          "logistics": "Logística / Cadena de Suministro",
+          "other": "Otro"
+        }
+      },
+      "companySize": {
+        "question": "¿Cuál es el tamaño de tu organización?",
+        "options": {
+          "startup": "Startup (1-10 empleados)",
+          "small": "Pequeña (11-50 empleados)",
+          "medium": "Mediana (51-200 empleados)",
+          "large": "Grande (201-1000 empleados)",
+          "enterprise": "Empresa (1000+ empleados)"
+        }
+      },
+      "challenge": {
+        "question": "¿Cuál es tu principal desafío empresarial?",
+        "options": {
+          "efficiency": "Eficiencia Operacional",
+          "digital": "Transformación Digital",
+          "cost": "Reducción de Costos",
+          "quality": "Mejora de Calidad",
+          "customer": "Experiencia del Cliente",
+          "analytics": "Datos y Análisis",
+          "automation": "Automatización de Procesos"
+        }
+      },
+      "systems": {
+        "question": "¿Qué sistemas utilizas actualmente?",
+        "options": {
+          "erp": "ERP (SAP, Oracle, etc.)",
+          "crm": "CRM (Salesforce, HubSpot)",
+          "custom": "Software Personalizado",
+          "spreadsheets": "Hojas de Cálculo / Manual",
+          "legacy": "Múltiples Sistemas Heredados",
+          "none": "Ninguno / Empezando de Cero"
+        }
+      },
+      "goal": {
+        "question": "¿Qué resultado esperas lograr?",
+        "options": {
+          "revenue": "Aumentar Ingresos",
+          "costs": "Reducir Costos",
+          "efficiency": "Mejorar Eficiencia",
+          "decisions": "Mejor Toma de Decisiones",
+          "competitive": "Ventaja Competitiva",
+          "compliance": "Cumplimiento / Gestión de Riesgos"
+        }
+      }
+    },
+    "completion": "¡Gracias por compartir! Basándome en tu negocio de **{industry}** y tu enfoque en **{challenge}**, estoy listo para ayudar. Puedo asistirte con:\n\n• Planificación estratégica y hojas de ruta\n• Recomendaciones de optimización de procesos\n• Orientación en tecnología y sistemas\n• Mejores prácticas de implementación\n\n¿Qué te gustaría discutir?"
+  },
+  "dataTable": {
+    "title": "Rastreador de Procesos",
+    "description": "Compara filas heredadas con especificaciones convertidas.",
+    "columns": "Columnas",
+    "searchPlaceholder": "Buscar en todas las columnas...",
+    "noResults": "No se encontraron resultados. Intenta ajustar tu búsqueda.",
+    "showing": "Mostrando {count} de {total} resultados",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "columnHeaders": {
+      "batchId": "ID de Lote",
+      "partName": "Nombre de Pieza",
+      "material": "Material",
+      "processType": "Tipo de Proceso",
+      "techSpecDelta": "Delta de Especificación Técnica",
+      "labelLeft": "Etiqueta (Izquierda)",
+      "labelRight": "Etiqueta (Derecha)"
+    }
+  },
+  "languageSwitcher": {
+    "label": "Seleccionar idioma",
+    "current": "Idioma actual: {language}"
+  }
+}

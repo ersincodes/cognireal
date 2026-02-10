@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 type ScrollGuideState = {
   readonly isAtBottom: boolean;
@@ -12,6 +13,7 @@ const ScrollGuide = () => {
   const [scrollGuideState, setScrollGuideState] = useState<ScrollGuideState>({
     isAtBottom: false,
   });
+  const { t } = useLanguage();
 
   const handleScrollPositionChange = useCallback(() => {
     const viewportHeight = window.innerHeight;
@@ -75,12 +77,12 @@ const ScrollGuide = () => {
   }, [handleScrollPositionChange]);
 
   const ariaLabel = scrollGuideState.isAtBottom
-    ? "Scroll back to the top of the page"
-    : "Scroll down to explore more content";
+    ? t("scrollGuide.ariaTop")
+    : t("scrollGuide.ariaExplore");
 
   const labelText = scrollGuideState.isAtBottom
-    ? "Scroll to top"
-    : "Scroll to explore";
+    ? t("scrollGuide.scrollToTop")
+    : t("scrollGuide.scrollToExplore");
 
   return (
     <div

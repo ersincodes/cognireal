@@ -1,0 +1,208 @@
+{
+  "metadata": {
+    "title": "Cognireal",
+    "description": "Cognireal is a web design and development company that helps businesses create modern, fast, mobile-ready websites that look professional and perform well."
+  },
+  "navbar": {
+    "work": "Work",
+    "services": "Services",
+    "contact": "Contact",
+    "bookCall": "Book a Call",
+    "logoAlt": "Cognireal logo"
+  },
+  "hero": {
+    "heading": "The digital transformation",
+    "subheading": "that respects your operation and upgrades your business",
+    "iconAlt": "Cognireal icon"
+  },
+  "servicesGraph": {
+    "webDesign": "Web Design",
+    "aiSolutions": "AI Solutions",
+    "webApps": "Web Apps"
+  },
+  "webPages": {
+    "label": "WE DESIGN",
+    "heading": "WEB PAGES",
+    "description": "Modern, fast, mobile-ready websites for businesses that want to look professional.",
+    "button": "Like This One",
+    "modal": {
+      "title": "Before & After",
+      "description": "Drag the handle to compare the original vs updated website.",
+      "before": "Before",
+      "after": "After",
+      "helper": "Drag to compare, or use arrow keys while focused (Shift for bigger steps)."
+    }
+  },
+  "aiSystems": {
+    "label": "WE IMPLEMENT",
+    "heading": "AI SYSTEMS",
+    "description": "Automated reports, intelligent chatbots, and custom automation systems that upgrade how your business works.",
+    "button": "Try a Demo"
+  },
+  "webApps": {
+    "label": "We build",
+    "heading": "Web Applications",
+    "description": "Customed web tools that optimize operations, automate workflows, and bring clarity to your processes.",
+    "button": "See a Real Case",
+    "modal": {
+      "title": "Dynamic Data Table",
+      "descriptionBefore": "Review the legacy spreadsheet, then convert it into an interactive table.",
+      "descriptionAfter": "Explore the interactive data table we built from the legacy sheet.",
+      "before": "Before",
+      "after": "After",
+      "legacySpreadsheet": "Legacy Spreadsheet",
+      "interactiveTable": "Interactive Data Table",
+      "converted": "Converted",
+      "convert": "Convert",
+      "converting": "Converting...",
+      "backToLegacy": "Back to Legacy"
+    }
+  },
+  "servicesSnapshot": {
+    "label": "Our process",
+    "heading": "From first call to ongoing partnership.",
+    "step": "Step",
+    "steps": {
+      "discover": {
+        "title": "Discover",
+        "description": "We analyze your business, workflows, and goals: where you are now and where you want to go."
+      },
+      "design": {
+        "title": "Design",
+        "description": "We design the right UX, architecture, and systems, tailored to your teams and operations."
+      },
+      "develop": {
+        "title": "Develop",
+        "description": "We build and integrate everything with modern technologies, keeping your operation running."
+      },
+      "launch": {
+        "title": "Launch",
+        "description": "We launch, train your team, adjust, and stay as your long-term digital partner."
+      }
+    }
+  },
+  "process": {
+    "text": "In Cognireal, we help companies modernize, optimize, and operate smarter with digital solutions that actually work in the real world."
+  },
+  "mission": {
+    "heading": "Ready to transform your business?",
+    "description": "Share your current challenges and we will return with a plan in under 48 hours.",
+    "button": "Book a Discovery Call"
+  },
+  "footer": {
+    "copyright": "© {year} Cognireal. All rights reserved.",
+    "linkedin": "LinkedIn",
+    "twitter": "Twitter",
+    "instagram": "Instagram"
+  },
+  "scrollGuide": {
+    "scrollToExplore": "Scroll to explore",
+    "scrollToTop": "Scroll to top",
+    "ariaExplore": "Scroll down to explore more content",
+    "ariaTop": "Scroll back to the top of the page"
+  },
+  "modal": {
+    "close": "Close modal"
+  },
+  "chat": {
+    "title": "Business Analyst Assistant",
+    "statusReady": "Ready to help",
+    "statusOnboarding": "Getting to know you",
+    "placeholder": "Ask your question...",
+    "footerText": "Please answer the questions above to continue",
+    "changeContext": "Change context",
+    "clearHistory": "Clear chat history",
+    "closeChat": "Close chat",
+    "sendMessage": "Send message"
+  },
+  "wizard": {
+    "intro": "Welcome! I'm your Business Analyst Assistant from Cognireal.\n\nTo provide you with the most relevant guidance, I'd like to learn a bit about your business. Let's start with a few quick questions.",
+    "stepProgress": "Step {current} of {total}",
+    "customInputLabel": "Please specify your industry:",
+    "customInputPlaceholder": "Enter your industry...",
+    "continue": "Continue",
+    "backToOptions": "← Back to options",
+    "questions": {
+      "industry": {
+        "question": "What industry does your business operate in?",
+        "options": {
+          "manufacturing": "Manufacturing",
+          "healthcare": "Healthcare",
+          "retail": "Retail / E-commerce",
+          "finance": "Finance / Banking",
+          "technology": "Technology / SaaS",
+          "logistics": "Logistics / Supply Chain",
+          "other": "Other"
+        }
+      },
+      "companySize": {
+        "question": "What is the size of your organization?",
+        "options": {
+          "startup": "Startup (1-10 employees)",
+          "small": "Small (11-50 employees)",
+          "medium": "Medium (51-200 employees)",
+          "large": "Large (201-1000 employees)",
+          "enterprise": "Enterprise (1000+ employees)"
+        }
+      },
+      "challenge": {
+        "question": "What is your main business challenge?",
+        "options": {
+          "efficiency": "Operational Efficiency",
+          "digital": "Digital Transformation",
+          "cost": "Cost Reduction",
+          "quality": "Quality Improvement",
+          "customer": "Customer Experience",
+          "analytics": "Data & Analytics",
+          "automation": "Process Automation"
+        }
+      },
+      "systems": {
+        "question": "What systems do you currently use?",
+        "options": {
+          "erp": "ERP (SAP, Oracle, etc.)",
+          "crm": "CRM (Salesforce, HubSpot)",
+          "custom": "Custom Software",
+          "spreadsheets": "Spreadsheets / Manual",
+          "legacy": "Multiple Legacy Systems",
+          "none": "None / Starting Fresh"
+        }
+      },
+      "goal": {
+        "question": "What outcome are you hoping to achieve?",
+        "options": {
+          "revenue": "Increase Revenue",
+          "costs": "Reduce Costs",
+          "efficiency": "Improve Efficiency",
+          "decisions": "Better Decision Making",
+          "competitive": "Competitive Advantage",
+          "compliance": "Compliance / Risk Management"
+        }
+      }
+    },
+    "completion": "Thanks for sharing! Based on your **{industry}** business and focus on **{challenge}**, I'm ready to help. I can assist you with:\n\n• Strategic planning and roadmaps\n• Process optimization recommendations\n• Technology and system guidance\n• Implementation best practices\n\nWhat would you like to discuss?"
+  },
+  "dataTable": {
+    "title": "Process Tracker",
+    "description": "Compare legacy rows with converted specs.",
+    "columns": "Columns",
+    "searchPlaceholder": "Search across all columns...",
+    "noResults": "No results found. Try adjusting your search.",
+    "showing": "Showing {count} of {total} results",
+    "previous": "Previous",
+    "next": "Next",
+    "columnHeaders": {
+      "batchId": "Batch ID",
+      "partName": "Part Name",
+      "material": "Material",
+      "processType": "Process Type",
+      "techSpecDelta": "Tech Spec Delta",
+      "labelLeft": "Label (Left)",
+      "labelRight": "Label (Right)"
+    }
+  },
+  "languageSwitcher": {
+    "label": "Select language",
+    "current": "Current language: {language}"
+  }
+}

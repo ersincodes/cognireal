@@ -1,43 +1,31 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-
-type WordSegment = {
-  text: string;
-  className?: string;
-};
-
-const segments: WordSegment[] = [
-  { text: "In" },
-  { text: "Cognireal," },
-  { text: "we" },
-  { text: "help" },
-  { text: "companies" },
-  { text: "modernize", className: "text-brand-cyan" },
-  { text: "," },
-  {
-    text: "optimize",
-    className:
-      "bg-gradient-to-r from-brand-cyan to-brand-blue bg-clip-text text-transparent",
-  },
-  { text: "," },
-  { text: "and" },
-  { text: "operate", className: "text-brand-blue" },
-  { text: "smarter", className: "text-brand-blue" },
-  { text: "with" },
-  { text: "digital" },
-  { text: "solutions" },
-  { text: "that" },
-  { text: "actually" },
-  { text: "work" },
-  { text: "in" },
-  { text: "the" },
-  { text: "real" },
-  { text: "world." },
-];
+import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { t } = useLanguage();
+
+  // Get the translated text and split into words
+  const processText = t("process.text");
+  const words = processText.split(" ");
+
+  // Define which words should have special styling (based on position/content)
+  const getWordClassName = (word: string, index: number): string => {
+    const lowerWord = word.toLowerCase().replace(/[,.]/, "");
+    if (lowerWord === "modernize" || lowerWord === "modernizarse" || lowerWord === "modernisieren") {
+      return "text-brand-cyan";
+    }
+    if (lowerWord === "optimize" || lowerWord === "optimizarse" || lowerWord === "optimieren") {
+      return "bg-gradient-to-r from-brand-cyan to-brand-blue bg-clip-text text-transparent";
+    }
+    if (lowerWord === "operate" || lowerWord === "operar" || lowerWord === "arbeiten" ||
+        lowerWord === "smarter" || lowerWord === "inteligente" || lowerWord === "intelligenter") {
+      return "text-brand-blue";
+    }
+    return "";
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -71,15 +59,15 @@ export default function Process() {
       ref={sectionRef}
       className="flex min-h-[60vh] items-center justify-center bg-background px-6 py-24 md:py-32">
       <h2 className="max-w-4xl text-center text-2xl font-bold leading-snug tracking-tight text-brand-dark md:text-3xl lg:text-4xl">
-        {segments.map((segment, index) => (
+        {words.map((word, index) => (
           <span
             key={index}
             className={`word inline-block translate-y-4 opacity-0 transition-all duration-500 ease-out ${
-              segment.className || ""
+              getWordClassName(word, index)
             }`}
             style={{ transitionDelay: `${index * 60}ms` }}>
-            {segment.text}
-            {index < segments.length - 1 && "\u00A0"}
+            {word}
+            {index < words.length - 1 && "\u00A0"}
           </span>
         ))}
       </h2>

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 type ModalProps = {
   isOpen: boolean;
@@ -47,6 +48,7 @@ const Modal = ({
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  const { t } = useLanguage();
 
   const ariaDescribedBy = useMemo(() => {
     if (!description) return undefined;
@@ -163,7 +165,7 @@ const Modal = ({
           <button
             ref={closeButtonRef}
             type="button"
-            aria-label="Close modal"
+            aria-label={t("modal.close")}
             onClick={onClose}
             className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-full text-gray-700 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2">
             <X className="h-5 w-5" aria-hidden="true" />

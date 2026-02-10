@@ -7,10 +7,9 @@ import ChatMessage from "./ChatMessage";
 import WizardMessage from "./WizardMessage";
 import {
   WIZARD_QUESTIONS,
-  WIZARD_INTRO_MESSAGE,
-  generateCompletionMessage,
   getAnswerLabel,
 } from "@/lib/wizard";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -42,6 +41,7 @@ const ChatWindow = ({
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { t } = useLanguage();
 
   const isWizardComplete = wizardState.isComplete;
   const currentQuestion = WIZARD_QUESTIONS[wizardState.currentStep];
@@ -94,11 +94,11 @@ const ChatWindow = ({
   const buildDisplayMessages = (): ChatMessageType[] => {
     const displayMessages: ChatMessageType[] = [];
 
-    // Always show intro message first
+    // Always show intro message first (using translated text)
     displayMessages.push({
       id: "wizard-intro",
       role: "assistant",
-      content: WIZARD_INTRO_MESSAGE,
+      content: t("wizard.intro"),
       timestamp: 0,
     });
 
@@ -106,18 +106,19 @@ const ChatWindow = ({
     wizardState.answers.forEach((answer, index) => {
       const question = WIZARD_QUESTIONS[index];
       if (question) {
-        // Show question as assistant message
+        // Show question as assistant message (using translated text)
         displayMessages.push({
           id: `wizard-q-${index}`,
           role: "assistant",
-          content: question.question,
+          content: t(`wizard.questions.${question.id}.question`),
           timestamp: index + 1,
         });
-        // Show answer as user message
+        // Show answer as user message (using translated option label)
+        const translatedAnswer = answer.customValue || t(`wizard.questions.${question.id}.options.${answer.answerId}`);
         displayMessages.push({
           id: `wizard-a-${index}`,
           role: "user",
-          content: getAnswerLabel(answer.questionId, answer.answerId, answer.customValue),
+          content: translatedAnswer,
           timestamp: index + 2,
         });
       }
@@ -125,10 +126,19 @@ const ChatWindow = ({
 
     // If wizard is complete, show completion message and chat messages
     if (isWizardComplete) {
+      // Get translated labels for industry and challenge
+      const industryAnswer = wizardState.answers.find(a => a.questionId === "industry");
+      const challengeAnswer = wizardState.answers.find(a => a.questionId === "challenge");
+      
+      const industryLabel = industryAnswer?.customValue || 
+        (industryAnswer ? t(`wizard.questions.industry.options.${industryAnswer.answerId}`) : "");
+      const challengeLabel = challengeAnswer ? 
+        t(`wizard.questions.challenge.options.${challengeAnswer.answerId}`) : "";
+      
       displayMessages.push({
         id: "wizard-complete",
         role: "assistant",
-        content: generateCompletionMessage(wizardState.answers),
+        content: t("wizard.completion", { industry: industryLabel, challenge: challengeLabel }),
         timestamp: 100,
       });
       // Add actual chat messages
@@ -155,10 +165,10 @@ const ChatWindow = ({
       <div className="shrink-0 flex items-center justify-between rounded-t-2xl bg-gradient-to-r from-brand-blue to-brand-cyan px-4 py-3">
         <div className="flex flex-col">
           <h2 className="text-base font-semibold text-white">
-            Business Analyst Assistant
+            {t("chat.title")}
           </h2>
           <p className="text-xs text-white/80">
-            {isWizardComplete ? "Ready to help" : "Getting to know you"}
+            {isWizardComplete ? t("chat.statusReady") : t("chat.statusOnboarding")}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -166,8 +176,8 @@ const ChatWindow = ({
             <button
               onClick={onResetWizard}
               className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
-              aria-label="Change context"
-              title="Change context"
+              aria-label={t("chat.changeContext")}
+              title={t("chat.changeContext")}
               tabIndex={0}
             >
               <RotateCcw className="h-4 w-4" />
@@ -176,7 +186,7 @@ const ChatWindow = ({
           <button
             onClick={onClearChat}
             className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
-            aria-label="Clear chat history"
+            aria-label={t("chat.clearHistory")}
             tabIndex={0}
           >
             <Trash2 className="h-4 w-4" />
@@ -184,7 +194,7 @@ const ChatWindow = ({
           <button
             onClick={onClose}
             className="rounded-lg p-2 text-white/80 transition-colors hover:bg-white/20 hover:text-white"
-            aria-label="Close chat"
+            aria-label={t("chat.closeChat")}
             tabIndex={0}
           >
             <X className="h-5 w-5" />
@@ -238,7 +248,7 @@ const ChatWindow = ({
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Ask your question..."
+            placeholder={t("chat.placeholder")}
             className="max-h-[120px] min-h-[44px] flex-1 resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-brand-dark placeholder:text-gray-400 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue"
             rows={1}
             disabled={isLoading}
@@ -248,7 +258,7 @@ const ChatWindow = ({
             type="submit"
             disabled={!inputValue.trim() || isLoading}
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-blue text-white transition-all hover:bg-brand-blue/90 disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Send message"
+            aria-label={t("chat.sendMessage")}
             tabIndex={0}
           >
             <Send className="h-5 w-5" />
@@ -257,7 +267,7 @@ const ChatWindow = ({
       ) : (
         <div className="shrink-0 border-t border-gray-100 bg-gray-50 px-4 py-3">
           <p className="text-center text-xs text-gray-500">
-            Please answer the questions above to continue
+            {t("chat.footerText")}
           </p>
         </div>
       )}

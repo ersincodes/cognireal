@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import { Bot } from "lucide-react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,7 @@ export default function AIImplementations() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useGSAP(
     () => {
@@ -74,20 +76,19 @@ export default function AIImplementations() {
             ref={labelRef}
             className="text-sm font-medium uppercase tracking-widest text-gray-600 md:text-base"
           >
-            WE IMPLEMENT
+            {t("aiSystems.label")}
           </p>
           <h2
             ref={titleRef}
             className="mt-2 text-6xl font-black uppercase tracking-tight text-black md:text-8xl"
           >
-            AI SYSTEMS
+            {t("aiSystems.heading")}
           </h2>
           <p
             ref={descRef}
             className="mt-6 max-w-2xl text-xl leading-relaxed text-gray-500 md:text-2xl"
           >
-            Automated reports, intelligent chatbots, and custom automation
-            systems that upgrade how your business works.
+            {t("aiSystems.description")}
           </p>
         </div>
 
@@ -97,9 +98,9 @@ export default function AIImplementations() {
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
-            aria-label="Try a demo"
+            aria-label={t("aiSystems.button")}
           >
-            <span>Try a Demo</span>
+            <span>{t("aiSystems.button")}</span>
             <Bot className="h-5 w-5" aria-hidden="true" />
           </Link>
         </div>

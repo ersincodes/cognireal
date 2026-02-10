@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Bot } from "lucide-react";
 import type { WizardQuestion } from "@/types/chat";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 interface WizardMessageProps {
   question: WizardQuestion;
@@ -20,6 +21,7 @@ const WizardMessage = ({
   const [customInput, setCustomInput] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const handleOptionClick = (optionId: string, allowCustom?: boolean) => {
     if (allowCustom) {
@@ -73,14 +75,14 @@ const WizardMessage = ({
             ))}
           </div>
           <span className="text-xs text-gray-500">
-            Step {currentStep + 1} of {totalSteps}
+            {t("wizard.stepProgress", { current: currentStep + 1, total: totalSteps })}
           </span>
         </div>
 
         {/* Question */}
         <div className="rounded-2xl rounded-bl-md bg-gray-100 px-4 py-2.5 text-brand-dark">
           <p className="text-sm font-medium leading-relaxed">
-            {question.question}
+            {t(`wizard.questions.${question.id}.question`)}
           </p>
         </div>
 
@@ -93,16 +95,16 @@ const WizardMessage = ({
                 onClick={() => handleOptionClick(option.id, option.allowCustom)}
                 className="rounded-xl border border-brand-blue/30 bg-white px-3 py-2 text-sm text-brand-dark transition-all hover:border-brand-blue hover:bg-brand-blue/5 focus:outline-none focus:ring-2 focus:ring-brand-blue/50"
                 tabIndex={0}
-                aria-label={`Select ${option.label}`}
+                aria-label={`Select ${t(`wizard.questions.${question.id}.options.${option.id}`)}`}
               >
-                {option.label}
+                {t(`wizard.questions.${question.id}.options.${option.id}`)}
               </button>
             ))}
           </div>
         ) : (
           <div className="flex flex-col gap-2">
             <p className="text-xs text-gray-500">
-              Please specify your industry:
+              {t("wizard.customInputLabel")}
             </p>
             <div className="flex gap-2">
               <input
@@ -110,7 +112,7 @@ const WizardMessage = ({
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Enter your industry..."
+                placeholder={t("wizard.customInputPlaceholder")}
                 className="flex-1 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-brand-dark placeholder:text-gray-400 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue"
                 autoFocus
                 aria-label="Custom industry input"
@@ -121,7 +123,7 @@ const WizardMessage = ({
                 tabIndex={0}
                 aria-label="Submit custom answer"
               >
-                Continue
+                {t("wizard.continue")}
               </button>
             </div>
             <button
@@ -134,7 +136,7 @@ const WizardMessage = ({
               tabIndex={0}
               aria-label="Go back to options"
             >
-              ← Back to options
+              {t("wizard.backToOptions")}
             </button>
           </div>
         )}

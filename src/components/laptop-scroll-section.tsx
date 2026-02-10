@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import Image from "next/image";
 import Modal from "./modal";
 import ImmersiveDataTable from "./immersive-data-table";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,7 @@ export default function LaptopScrollSection() {
   const [isBeforeVisible, setIsBeforeVisible] = useState(false);
   const [isConverting, setIsConverting] = useState(false);
   const beforeTimerRef = useRef<number | null>(null);
+  const { t } = useLanguage();
 
   const handleOpenCaseModal = () => {
     if (beforeTimerRef.current) {
@@ -129,31 +131,30 @@ export default function LaptopScrollSection() {
           ref={text2Ref}
           className="pointer-events-auto absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-6 text-center opacity-0">
           <p className="text-sm font-semibold uppercase tracking-[0.4em] text-white/70">
-            We build
+            {t("webApps.label")}
           </p>
           <h2 className="text-5xl font-semibold leading-tight text-white md:text-7xl">
-            Web Applications
+            {t("webApps.heading")}
           </h2>
           <p className="max-w-3xl text-lg text-white/80 md:text-2xl">
-            Customed web tools that optimize operations, automate workflows, and
-            bring clarity to your processes.
+            {t("webApps.description")}
           </p>
           <button
             type="button"
             aria-label="See a real case web app transformation"
             onClick={handleOpenCaseModal}
             className="mt-8 cursor-pointer inline-block rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2">
-            See a Real Case
+            {t("webApps.button")}
           </button>
         </div>
       </div>
       <Modal
         isOpen={isCaseModalOpen}
-        title="Dynamic Data Table"
+        title={t("webApps.modal.title")}
         description={
           showAfter
-            ? "Explore the interactive data table we built from the legacy sheet."
-            : "Review the legacy spreadsheet, then convert it into an interactive table."
+            ? t("webApps.modal.descriptionAfter")
+            : t("webApps.modal.descriptionBefore")
         }
         onClose={handleCloseCaseModal}>
         <div className="mx-auto flex max-w-5xl flex-col gap-6">
@@ -172,10 +173,10 @@ export default function LaptopScrollSection() {
               <div className="flex items-center justify-between px-6 py-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
-                    Before
+                    {t("webApps.modal.before")}
                   </p>
                   <p className="text-lg font-semibold text-gray-900">
-                    Legacy Spreadsheet
+                    {t("webApps.modal.legacySpreadsheet")}
                   </p>
                 </div>
                 <button
@@ -184,7 +185,7 @@ export default function LaptopScrollSection() {
                   disabled={isConverting}
                   className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:scale-[1.02] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-80"
                   aria-label="Convert to interactive table">
-                  {isConverting ? "Converting..." : "Convert"}
+                  {isConverting ? t("webApps.modal.converting") : t("webApps.modal.convert")}
                 </button>
               </div>
               <div className="relative h-[60vh] min-h-[360px] w-full bg-gray-50">
@@ -202,22 +203,22 @@ export default function LaptopScrollSection() {
               <div className="flex items-center justify-between px-6 py-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
-                    After
+                    {t("webApps.modal.after")}
                   </p>
                   <p className="text-lg font-semibold text-gray-900">
-                    Interactive Data Table
+                    {t("webApps.modal.interactiveTable")}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-800">
-                    Converted
+                    {t("webApps.modal.converted")}
                   </span>
                   <button
                     type="button"
                     onClick={() => setShowAfter(false)}
                     className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
                     aria-label="Back to legacy view">
-                    Back to Legacy
+                    {t("webApps.modal.backToLegacy")}
                   </button>
                 </div>
               </div>

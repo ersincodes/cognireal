@@ -39,6 +39,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      aria-labelledby="hero-heading"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#f7f8fc] px-4 text-brand-dark">
       <Navbar />
 
@@ -93,7 +94,10 @@ export default function Hero() {
         </div>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-black uppercase leading-tight tracking-[0.08em] md:text-5xl">
+          <h1
+            id="hero-heading"
+            className="text-3xl font-black uppercase leading-tight tracking-[0.08em] md:text-5xl"
+          >
             {t("hero.heading")}
           </h1>
           <p className="text-base text-brand-muted md:text-xl">

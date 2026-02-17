@@ -46,12 +46,17 @@ export default function ServicesSnapshot() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative z-10 flex justify-center bg-brand-card px-4 py-24 text-brand-dark">
+      aria-labelledby="services-snapshot-heading"
+      className="relative z-10 flex justify-center bg-brand-card px-4 py-24 text-brand-dark"
+    >
       <div className="w-full max-w-5xl">
         <p className="text-sm font-semibold uppercase tracking-[0.4em] text-brand-muted">
           {t("servicesSnapshot.label")}
         </p>
-        <h2 className="mt-4 text-4xl font-semibold md:text-5xl">
+        <h2
+          id="services-snapshot-heading"
+          className="mt-4 text-4xl font-semibold md:text-5xl"
+        >
           {t("servicesSnapshot.heading")}
         </h2>
 
@@ -61,12 +66,17 @@ export default function ServicesSnapshot() {
           {stepKeys.map((stepKey, index) => (
             <article
               key={stepKey}
-              className="flex flex-col gap-4 rounded-3xl border border-brand-blue/15 bg-white p-6 shadow-[0_20px_60px_rgba(9,10,20,0.08)]">
-              <span className="text-xs font-semibold uppercase tracking-[0.4em] text-brand-muted">
+              className="flex flex-col gap-4 rounded-3xl border border-brand-blue/15 bg-white p-6 shadow-[0_20px_60px_rgba(9,10,20,0.08)]"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-brand-muted">
                 {t("servicesSnapshot.step")} {index + 1}
-              </span>
-              <h3 className="text-2xl font-semibold">{t(`servicesSnapshot.steps.${stepKey}.title`)}</h3>
-              <p className="text-sm text-brand-muted">{t(`servicesSnapshot.steps.${stepKey}.description`)}</p>
+              </p>
+              <h3 className="text-lg font-semibold tracking-tight">
+                {t(`servicesSnapshot.steps.${stepKey}.title`)}
+              </h3>
+              <p className="text-sm text-brand-muted">
+                {t(`servicesSnapshot.steps.${stepKey}.description`)}
+              </p>
             </article>
           ))}
         </div>

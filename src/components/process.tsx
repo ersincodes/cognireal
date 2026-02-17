@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export default function Process() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLParagraphElement>(null);
   const { t } = useLanguage();
 
   // Get the translated text and split into words
@@ -56,21 +56,33 @@ export default function Process() {
 
   return (
     <section
-      ref={sectionRef}
-      className="flex min-h-[60vh] items-center justify-center bg-background px-6 py-24 md:py-32">
-      <h2 className="max-w-4xl text-center text-2xl font-bold leading-snug tracking-tight text-brand-dark md:text-3xl lg:text-4xl">
+      id="process"
+      aria-labelledby="process-heading"
+      className="flex min-h-[60vh] flex-col items-center justify-center bg-background px-6 py-24 md:py-32"
+    >
+      <h2
+        id="process-heading"
+        className="text-balance text-3xl font-semibold tracking-tight mb-6 md:text-4xl"
+      >
+        {t("process.heading")}
+      </h2>
+      <p
+        ref={sectionRef}
+        className="max-w-4xl text-center text-2xl font-bold leading-snug tracking-tight text-brand-dark md:text-3xl lg:text-4xl"
+      >
         {words.map((word, index) => (
           <span
             key={index}
             className={`word inline-block translate-y-4 opacity-0 transition-all duration-500 ease-out ${
               getWordClassName(word, index)
             }`}
-            style={{ transitionDelay: `${index * 60}ms` }}>
+            style={{ transitionDelay: `${index * 60}ms` }}
+          >
             {word}
             {index < words.length - 1 && "\u00A0"}
           </span>
         ))}
-      </h2>
+      </p>
 
       <style jsx>{`
         .word.animate-in {

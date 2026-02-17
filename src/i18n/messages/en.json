@@ -16,6 +16,7 @@
     "iconAlt": "Cognireal icon"
   },
   "servicesGraph": {
+    "heading": "Our services",
     "webDesign": "Web Design",
     "aiSolutions": "AI Solutions",
     "webApps": "Web Apps"
@@ -82,6 +83,7 @@
     }
   },
   "process": {
+    "heading": "Our process",
     "text": "In Cognireal, we help companies modernize, optimize, and operate smarter with digital solutions that actually work in the real world."
   },
   "mission": {

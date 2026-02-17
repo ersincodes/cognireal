@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Globe, Settings, BrainCircuit } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -11,7 +12,7 @@ import { useLanguage } from "@/i18n/LanguageContext";
 gsap.registerPlugin(ScrollTrigger);
 
 const ServicesGraph = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const webDesignRef = useRef<HTMLDivElement>(null);
   const webAppRef = useRef<HTMLDivElement>(null);
@@ -97,9 +98,17 @@ const ServicesGraph = () => {
     <section
       id="services-graph"
       ref={containerRef}
-      className="relative flex h-screen w-full flex-col justify-center overflow-hidden bg-gradient-to-b from-[#f0f2fa] via-[#e8ebf8] to-[#f7f8fc] px-4">
+      aria-labelledby="services-graph-heading"
+      className="relative flex h-screen w-full flex-col justify-center overflow-hidden bg-gradient-to-b from-[#f0f2fa] via-[#e8ebf8] to-[#f7f8fc] px-4"
+    >
       {/* Subtle top divider line */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+      <h2
+        id="services-graph-heading"
+        className="text-balance text-3xl font-semibold tracking-tight mb-8 text-center md:text-4xl"
+      >
+        {t("servicesGraph.heading")}
+      </h2>
       <div className="relative mx-auto flex w-full max-w-6xl flex-col items-center md:h-[450px]">
         {/* SVG Lines Layer (Desktop) */}
         <svg
@@ -192,13 +201,18 @@ const ServicesGraph = () => {
           {/* Left Node: Web Design */}
           <div
             ref={webDesignRef}
-            className="flex flex-col items-center justify-center md:pt-24">
+            className="flex flex-col items-center justify-center md:pt-24"
+          >
             <div className="group relative flex flex-col items-center gap-3 p-1 text-center transition-all duration-300 md:w-56">
               <div className="flex items-center justify-center">
                 <Globe className="h-9 w-9 text-blue-600" aria-hidden="true" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">{t("servicesGraph.webDesign")}</h3>
+                <h3 className="text-xl font-semibold tracking-tight">
+                  <Link href="/services/web-pages" className="hover:underline text-slate-800">
+                    {t("servicesGraph.webDesign")}
+                  </Link>
+                </h3>
               </div>
             </div>
           </div>
@@ -206,7 +220,8 @@ const ServicesGraph = () => {
           {/* Center Bottom Node: AI Implementations */}
           <div
             ref={aiRef}
-            className="flex flex-col items-center justify-end pb-4 md:justify-end md:pb-8">
+            className="flex flex-col items-center justify-end pb-4 md:justify-end md:pb-8"
+          >
             <div className="group relative flex flex-col items-center p-1 gap-3 ring-white/50 transition-all duration-300 md:w-56">
               <div className="flex items-center justify-center">
                 <BrainCircuit
@@ -215,8 +230,10 @@ const ServicesGraph = () => {
                 />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">
-                  {t("servicesGraph.aiSolutions")}
+                <h3 className="text-xl font-semibold tracking-tight">
+                  <Link href="/services/ai-systems" className="hover:underline text-slate-800">
+                    {t("servicesGraph.aiSolutions")}
+                  </Link>
                 </h3>
               </div>
             </div>
@@ -225,7 +242,8 @@ const ServicesGraph = () => {
           {/* Right Node: Web Application */}
           <div
             ref={webAppRef}
-            className="flex flex-col items-center justify-center md:pt-24">
+            className="flex flex-col items-center justify-center md:pt-24"
+          >
             <div className="group relative flex flex-col items-center gap-3 p-1 text-center transition-all duration-300 md:w-56">
               <div className="flex items-center justify-center">
                 <Settings
@@ -234,7 +252,11 @@ const ServicesGraph = () => {
                 />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-800">{t("servicesGraph.webApps")}</h3>
+                <h3 className="text-xl font-semibold tracking-tight">
+                  <Link href="/services/web-applications" className="hover:underline text-slate-800">
+                    {t("servicesGraph.webApps")}
+                  </Link>
+                </h3>
               </div>
             </div>
           </div>

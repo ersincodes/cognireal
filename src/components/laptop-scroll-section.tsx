@@ -95,6 +95,7 @@ export default function LaptopScrollSection() {
 
   return (
     <section
+      id="work"
       ref={containerRef}
       className="relative bg-brand-dark text-white shadow-[0_2px_0_0_#020205]">
       <div className="flex h-screen w-full flex-col items-center justify-center overflow-hidden">

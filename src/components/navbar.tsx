@@ -9,12 +9,12 @@ const Navbar = () => {
   const { t } = useLanguage();
 
   const navItems = [
-    { label: t("navbar.work"), href: "/work" },
-    { label: t("navbar.services"), href: "/services" },
-    { label: t("navbar.contact"), href: "/contact" },
+    { label: t("navbar.work"), href: "/#work" },
+    { label: t("navbar.services"), href: "/#services" },
+    { label: t("navbar.contact"), href: "/#contact" },
   ];
 
-  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL || "/contact";
+  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL || "/#contact";
 
   return (
     <header className="pointer-events-none absolute top-0 left-0 right-0 z-30 flex justify-center px-4 pt-6">

@@ -2,6 +2,9 @@
   "name": "cognireal",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "postcss": "^8.5.10"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,7 +27,7 @@
     "@types/react-dom": "^19",
     "baseline-browser-mapping": "^2.9.19",
     "eslint": "^9",
-    "eslint-config-next": "16.0.7",
+    "eslint-config-next": "16.2.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

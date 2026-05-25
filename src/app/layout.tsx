@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import Script from "next/script";
-import LazyChat from "@/components/chat/LazyChat";
+import ChatShell from "@/components/chat/ChatShell";
 import { LanguageProvider } from "@/i18n/LanguageContext";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Cognireal",
@@ -35,10 +26,9 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <LanguageProvider>
-          {children}
-          <LazyChat />
+          <ChatShell>{children}</ChatShell>
         </LanguageProvider>
         <Script
           src="https://assets.calendly.com/assets/external/widget.js"

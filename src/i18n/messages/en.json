@@ -107,82 +107,33 @@
     "close": "Close modal"
   },
   "chat": {
-    "title": "Business Analyst Assistant",
-    "statusReady": "Ready to help",
-    "statusOnboarding": "Getting to know you",
-    "placeholder": "Ask your question...",
-    "footerText": "Please answer the questions above to continue",
-    "changeContext": "Change context",
+    "title": "AI Document Analyzer",
+    "statusReady": "Ready to analyze your document",
+    "placeholder": "Ask about your document...",
+    "ariaLabel": "AI Document Analyzer chat",
     "clearHistory": "Clear chat history",
     "closeChat": "Close chat",
-    "sendMessage": "Send message"
+    "sendMessage": "Send message",
+    "reasoning": "Analyzing your document — this may take 1–3 minutes..."
   },
-  "wizard": {
-    "intro": "Welcome! I'm your Business Analyst Assistant from Cognireal.\n\nTo provide you with the most relevant guidance, I'd like to learn a bit about your business. Let's start with a few quick questions.",
-    "stepProgress": "Step {current} of {total}",
-    "customInputLabel": "Please specify your industry:",
-    "customInputPlaceholder": "Enter your industry...",
-    "continue": "Continue",
-    "backToOptions": "← Back to options",
-    "questions": {
-      "industry": {
-        "question": "What industry does your business operate in?",
-        "options": {
-          "manufacturing": "Manufacturing",
-          "healthcare": "Healthcare",
-          "retail": "Retail / E-commerce",
-          "finance": "Finance / Banking",
-          "technology": "Technology / SaaS",
-          "logistics": "Logistics / Supply Chain",
-          "other": "Other"
-        }
-      },
-      "companySize": {
-        "question": "What is the size of your organization?",
-        "options": {
-          "startup": "Startup (1-10 employees)",
-          "small": "Small (11-50 employees)",
-          "medium": "Medium (51-200 employees)",
-          "large": "Large (201-1000 employees)",
-          "enterprise": "Enterprise (1000+ employees)"
-        }
-      },
-      "challenge": {
-        "question": "What is your main business challenge?",
-        "options": {
-          "efficiency": "Operational Efficiency",
-          "digital": "Digital Transformation",
-          "cost": "Cost Reduction",
-          "quality": "Quality Improvement",
-          "customer": "Customer Experience",
-          "analytics": "Data & Analytics",
-          "automation": "Process Automation"
-        }
-      },
-      "systems": {
-        "question": "What systems do you currently use?",
-        "options": {
-          "erp": "ERP (SAP, Oracle, etc.)",
-          "crm": "CRM (Salesforce, HubSpot)",
-          "custom": "Custom Software",
-          "spreadsheets": "Spreadsheets / Manual",
-          "legacy": "Multiple Legacy Systems",
-          "none": "None / Starting Fresh"
-        }
-      },
-      "goal": {
-        "question": "What outcome are you hoping to achieve?",
-        "options": {
-          "revenue": "Increase Revenue",
-          "costs": "Reduce Costs",
-          "efficiency": "Improve Efficiency",
-          "decisions": "Better Decision Making",
-          "competitive": "Competitive Advantage",
-          "compliance": "Compliance / Risk Management"
-        }
-      }
+  "demo": {
+    "welcome": "Welcome to the AI Document Analyzer.\n\nUpload a PDF or spreadsheet (max 10 MB) using the paperclip icon, then ask questions about your file.",
+    "privacy": "Your file is processed in memory and is not stored on our servers.",
+    "dropzone": "Drop your PDF or spreadsheet here (max 10 MB)",
+    "uploadDocument": "Upload document",
+    "removeDocument": "Remove document",
+    "parsing": "Analyzing document...",
+    "documentReady": "{chars} characters ready for analysis",
+    "errors": {
+      "fileTooLarge": "File is too large. Maximum size is {maxSize}.",
+      "unsupportedType": "Unsupported file type. Upload a PDF or spreadsheet (PDF, XLSX, CSV).",
+      "uploadFailed": "Unable to upload document. Please check your connection and try again."
     },
-    "completion": "Thanks for sharing! Based on your **{industry}** business and focus on **{challenge}**, I'm ready to help. I can assist you with:\n\n• Strategic planning and roadmaps\n• Process optimization recommendations\n• Technology and system guidance\n• Implementation best practices\n\nWhat would you like to discuss?"
+    "samplePrompts": {
+      "summarize": "Summarize this document",
+      "keyNumbers": "What are the key numbers?",
+      "actionItems": "List the main action items"
+    }
   },
   "dataTable": {
     "title": "Process Tracker",

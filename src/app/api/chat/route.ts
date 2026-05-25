@@ -4,38 +4,46 @@ import {
   getClientIdentifier,
   checkRateLimit,
   RATE_LIMIT_ERROR,
-  convertToGeminiFormat,
-  buildGeminiRequestBody,
-  getGeminiStreamUrl,
   isOutOfScopeResponse,
-} from "@/lib/chat";
-import {
   generateSystemPrompt,
   OUT_OF_SCOPE_REFUSAL,
-} from "@/lib/wizard";
+} from "@/lib/chat";
+import {
+  createNvidiaClient,
+  buildNvidiaMessages,
+  getNvidiaModel,
+  NVIDIA_GENERATION_CONFIG,
+} from "@/lib/chat/nvidia";
+import { chatDebug, chatError, extractStreamDelta } from "@/lib/chat/debug";
+
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
+  const requestId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const startedAt = Date.now();
+
   try {
-    // Rate limiting check
+    chatDebug("api", `request ${requestId} started`);
+
     const clientId = getClientIdentifier(request);
     if (!checkRateLimit(clientId)) {
+      chatDebug("api", `request ${requestId} rate limited`, { clientId });
       return NextResponse.json(
         { message: "", error: RATE_LIMIT_ERROR },
         { status: 429 }
       );
     }
 
-    // Parse and validate request body
     const body: ChatApiRequest = await request.json();
 
     if (!body.messages || !Array.isArray(body.messages)) {
+      chatDebug("api", `request ${requestId} invalid body`);
       return NextResponse.json(
         { message: "", error: "Invalid request format" },
         { status: 400 }
       );
     }
 
-    // Filter valid messages
     const validMessages = body.messages.filter(
       (msg) =>
         msg.role &&
@@ -45,16 +53,16 @@ export async function POST(request: NextRequest) {
     );
 
     if (validMessages.length === 0) {
+      chatDebug("api", `request ${requestId} no valid messages`);
       return NextResponse.json(
         { message: "", error: "No valid messages provided" },
         { status: 400 }
       );
     }
 
-    // Check for API key
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.NVIDIA_API_KEY;
     if (!apiKey) {
-      console.error("GEMINI_API_KEY is not configured");
+      chatError("api", `request ${requestId} missing NVIDIA_API_KEY`);
       return NextResponse.json(
         {
           message: "",
@@ -64,148 +72,192 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate dynamic system prompt based on wizard context
-    const systemPrompt = generateSystemPrompt(body.wizardContext);
+    const model = getNvidiaModel();
+    const hasDocument = Boolean(body.documentContext?.trim());
+    const systemPrompt = generateSystemPrompt(body.documentContext);
 
-    // Prepare messages for Gemini API
+    chatDebug("api", `request ${requestId} calling NVIDIA`, {
+      model,
+      messageCount: validMessages.length,
+      hasDocument,
+      systemPromptChars: systemPrompt.length,
+      lastUserMessage: validMessages[validMessages.length - 1]?.content?.slice(0, 120),
+    });
+
     const conversationMessages = validMessages.map((msg) => ({
       role: msg.role,
       content: msg.content,
     }));
-    const geminiContents = convertToGeminiFormat(conversationMessages);
 
-    // Build request body
-    const requestBody = buildGeminiRequestBody(systemPrompt, geminiContents);
+    const client = createNvidiaClient(apiKey);
+    const nvidiaStartedAt = Date.now();
 
-    // Call Gemini API with streaming
-    const response = await fetch(getGeminiStreamUrl(apiKey), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
-    });
+    let stream;
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.error("Gemini API error:", response.status, errorData);
-
-      if (response.status === 429) {
-        return NextResponse.json(
-          { message: "", error: "Service is busy. Please try again in a moment." },
-          { status: 429 }
-        );
-      }
-
-      return NextResponse.json(
-        { message: "", error: "Failed to get a response. Please try again." },
-        { status: 500 }
-      );
+    try {
+      stream = await client.chat.completions.create({
+        model,
+        messages: buildNvidiaMessages(systemPrompt, conversationMessages),
+        stream: true,
+        temperature: NVIDIA_GENERATION_CONFIG.temperature,
+        top_p: NVIDIA_GENERATION_CONFIG.top_p,
+        max_tokens: NVIDIA_GENERATION_CONFIG.max_tokens,
+      });
+    } catch (error) {
+      chatError("api", `request ${requestId} NVIDIA create() failed`, error);
+      throw error;
     }
 
-    // Create a streaming response
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
-      async start(controller) {
-        const reader = response.body?.getReader();
-        if (!reader) {
-          controller.close();
-          return;
-        }
+    chatDebug("api", `request ${requestId} stream opened`, {
+      msToOpen: Date.now() - nvidiaStartedAt,
+    });
 
-        const decoder = new TextDecoder();
+    const encoder = new TextEncoder();
+    const readableStream = new ReadableStream({
+      async start(controller) {
         let fullMessage = "";
-        let buffer = "";
+        let chunkIndex = 0;
+        let reasoningChunks = 0;
+        let contentChunks = 0;
+        let reasoningChars = 0;
+        let sentReasoningMeta = false;
+        let firstChunkAt: number | null = null;
+        let firstContentAt: number | null = null;
+
+        const enqueue = (payload: Record<string, unknown>) => {
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify(payload)}\n\n`)
+          );
+        };
 
         try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
+          for await (const chunk of stream) {
+            chunkIndex++;
+            const choice = chunk.choices[0];
+            const delta = choice?.delta as Record<string, unknown> | null | undefined;
+            const { content, reasoning } = extractStreamDelta(
+              delta as Parameters<typeof extractStreamDelta>[0]
+            );
 
-            buffer += decoder.decode(value, { stream: true });
+            if (chunkIndex === 1) {
+              firstChunkAt = Date.now();
+              chatDebug("api", `request ${requestId} first chunk`, {
+                msFromStart: firstChunkAt - nvidiaStartedAt,
+                deltaKeys: delta ? Object.keys(delta) : [],
+                finishReason: choice?.finish_reason,
+              });
+            }
 
-            // Gemini SSE format: "data: {json}\r\n\r\n" or "data: {json}\n\n"
-            // Split by double newline to get complete SSE events
-            const events = buffer.split(/\r?\n\r?\n/);
-            buffer = events.pop() || ""; // Keep incomplete event in buffer
+            if (reasoning) {
+              reasoningChunks++;
+              reasoningChars += reasoning.length;
 
-            for (const event of events) {
-              const trimmedEvent = event.trim();
-              if (!trimmedEvent) continue;
-
-              // Extract JSON from "data: {json}" format
-              let jsonStr = trimmedEvent;
-              if (trimmedEvent.startsWith("data:")) {
-                jsonStr = trimmedEvent.slice(5).trim();
+              if (!sentReasoningMeta) {
+                sentReasoningMeta = true;
+                chatDebug("api", `request ${requestId} reasoning phase started`);
+                enqueue({ meta: { phase: "reasoning" } });
               }
 
-              if (!jsonStr) continue;
-
-              try {
-                const data = JSON.parse(jsonStr);
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                
-                if (text) {
-                  fullMessage += text;
-                  // Send the chunk to the client
-                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: text })}\n\n`));
-                }
-
-                // Check for safety block
-                if (!text && data.candidates?.[0]?.finishReason === "SAFETY") {
-                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: OUT_OF_SCOPE_REFUSAL, replace: true })}\n\n`));
-                  fullMessage = OUT_OF_SCOPE_REFUSAL;
-                }
-              } catch {
-                // Skip invalid JSON lines
+              if (reasoningChunks <= 3 || reasoningChunks % 25 === 0) {
+                chatDebug("api", `request ${requestId} reasoning chunk`, {
+                  index: reasoningChunks,
+                  chars: reasoning.length,
+                  totalReasoningChars: reasoningChars,
+                });
               }
+            }
+
+            if (content) {
+              contentChunks++;
+              if (!firstContentAt) {
+                firstContentAt = Date.now();
+                chatDebug("api", `request ${requestId} first content chunk`, {
+                  msFromStart: firstContentAt - nvidiaStartedAt,
+                  msAfterFirstChunk: firstChunkAt
+                    ? firstContentAt - firstChunkAt
+                    : null,
+                  preview: content.slice(0, 80),
+                });
+                enqueue({ meta: { phase: "streaming" } });
+              }
+
+              fullMessage += content;
+              enqueue({ chunk: content });
+            }
+
+            if (chunkIndex <= 3 || chunkIndex % 50 === 0) {
+              chatDebug("api", `request ${requestId} chunk summary`, {
+                chunkIndex,
+                contentChunks,
+                reasoningChunks,
+                finishReason: choice?.finish_reason,
+              });
             }
           }
 
-          // Process any remaining buffer
-          if (buffer.trim()) {
-            let jsonStr = buffer.trim();
-            if (jsonStr.startsWith("data:")) {
-              jsonStr = jsonStr.slice(5).trim();
-            }
-            
-            if (jsonStr) {
-              try {
-                const data = JSON.parse(jsonStr);
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                if (text) {
-                  fullMessage += text;
-                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: text })}\n\n`));
-                }
-              } catch {
-                // Skip invalid JSON
-              }
-            }
+          chatDebug("api", `request ${requestId} stream complete`, {
+            totalMs: Date.now() - nvidiaStartedAt,
+            chunkIndex,
+            contentChunks,
+            reasoningChunks,
+            reasoningChars,
+            responseChars: fullMessage.length,
+            responsePreview: fullMessage.slice(0, 160),
+          });
+
+          if (!fullMessage && reasoningChars > 0) {
+            chatError(
+              "api",
+              `request ${requestId} ended with reasoning only — no user-visible content`,
+              { reasoningChars, reasoningChunks }
+            );
+            enqueue({
+              error:
+                "The model finished reasoning but returned no answer. Try a shorter question or check CHAT_DEBUG logs.",
+            });
+            return;
           }
 
-          // Check for out-of-scope response and replace if needed
-          if (isOutOfScopeResponse(fullMessage) && fullMessage !== OUT_OF_SCOPE_REFUSAL) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ chunk: OUT_OF_SCOPE_REFUSAL, replace: true })}\n\n`));
+          if (!fullMessage) {
+            chatError("api", `request ${requestId} empty response`, {
+              chunkIndex,
+              contentChunks,
+              reasoningChunks,
+            });
+            enqueue({ error: "The model returned an empty response." });
+            return;
           }
 
-          // Send done signal
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`));
+          if (
+            isOutOfScopeResponse(fullMessage) &&
+            fullMessage !== OUT_OF_SCOPE_REFUSAL
+          ) {
+            enqueue({ chunk: OUT_OF_SCOPE_REFUSAL, replace: true });
+          }
+
+          enqueue({ done: true });
         } catch (error) {
-          console.error("Streaming error:", error);
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: "Stream interrupted" })}\n\n`));
+          chatError("api", `request ${requestId} streaming error`, error);
+          enqueue({ error: "Stream interrupted" });
         } finally {
+          chatDebug("api", `request ${requestId} finished`, {
+            totalRequestMs: Date.now() - startedAt,
+          });
           controller.close();
         }
       },
     });
 
-    return new Response(stream, {
+    return new Response(readableStream, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
+        "X-Chat-Request-Id": requestId,
       },
     });
   } catch (error) {
-    console.error("Chat API error:", error);
+    chatError("api", `request ${requestId} failed`, error);
     return NextResponse.json(
       { message: "", error: "An unexpected error occurred. Please try again." },
       { status: 500 }

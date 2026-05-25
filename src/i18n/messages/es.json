@@ -107,82 +107,33 @@
     "close": "Cerrar modal"
   },
   "chat": {
-    "title": "Asistente de Análisis de Negocios",
-    "statusReady": "Listo para ayudar",
-    "statusOnboarding": "Conociéndote",
-    "placeholder": "Haz tu pregunta...",
-    "footerText": "Por favor responde las preguntas anteriores para continuar",
-    "changeContext": "Cambiar contexto",
+    "title": "Analizador de Documentos con IA",
+    "statusReady": "Listo para analizar tu documento",
+    "placeholder": "Pregunta sobre tu documento...",
+    "ariaLabel": "Chat del Analizador de Documentos con IA",
     "clearHistory": "Borrar historial del chat",
     "closeChat": "Cerrar chat",
-    "sendMessage": "Enviar mensaje"
+    "sendMessage": "Enviar mensaje",
+    "reasoning": "Analizando tu documento — esto puede tardar 1–3 minutos..."
   },
-  "wizard": {
-    "intro": "¡Bienvenido! Soy tu Asistente de Análisis de Negocios de Cognireal.\n\nPara brindarte la orientación más relevante, me gustaría conocer un poco sobre tu negocio. Comencemos con algunas preguntas rápidas.",
-    "stepProgress": "Paso {current} de {total}",
-    "customInputLabel": "Por favor especifica tu industria:",
-    "customInputPlaceholder": "Ingresa tu industria...",
-    "continue": "Continuar",
-    "backToOptions": "← Volver a opciones",
-    "questions": {
-      "industry": {
-        "question": "¿En qué industria opera tu negocio?",
-        "options": {
-          "manufacturing": "Manufactura",
-          "healthcare": "Salud",
-          "retail": "Retail / Comercio Electrónico",
-          "finance": "Finanzas / Banca",
-          "technology": "Tecnología / SaaS",
-          "logistics": "Logística / Cadena de Suministro",
-          "other": "Otro"
-        }
-      },
-      "companySize": {
-        "question": "¿Cuál es el tamaño de tu organización?",
-        "options": {
-          "startup": "Startup (1-10 empleados)",
-          "small": "Pequeña (11-50 empleados)",
-          "medium": "Mediana (51-200 empleados)",
-          "large": "Grande (201-1000 empleados)",
-          "enterprise": "Empresa (1000+ empleados)"
-        }
-      },
-      "challenge": {
-        "question": "¿Cuál es tu principal desafío empresarial?",
-        "options": {
-          "efficiency": "Eficiencia Operacional",
-          "digital": "Transformación Digital",
-          "cost": "Reducción de Costos",
-          "quality": "Mejora de Calidad",
-          "customer": "Experiencia del Cliente",
-          "analytics": "Datos y Análisis",
-          "automation": "Automatización de Procesos"
-        }
-      },
-      "systems": {
-        "question": "¿Qué sistemas utilizas actualmente?",
-        "options": {
-          "erp": "ERP (SAP, Oracle, etc.)",
-          "crm": "CRM (Salesforce, HubSpot)",
-          "custom": "Software Personalizado",
-          "spreadsheets": "Hojas de Cálculo / Manual",
-          "legacy": "Múltiples Sistemas Heredados",
-          "none": "Ninguno / Empezando de Cero"
-        }
-      },
-      "goal": {
-        "question": "¿Qué resultado esperas lograr?",
-        "options": {
-          "revenue": "Aumentar Ingresos",
-          "costs": "Reducir Costos",
-          "efficiency": "Mejorar Eficiencia",
-          "decisions": "Mejor Toma de Decisiones",
-          "competitive": "Ventaja Competitiva",
-          "compliance": "Cumplimiento / Gestión de Riesgos"
-        }
-      }
+  "demo": {
+    "welcome": "Bienvenido al Analizador de Documentos con IA.\n\nSube un PDF o una hoja de cálculo (máx. 10 MB) con el icono del clip, luego haz preguntas sobre tu archivo.",
+    "privacy": "Tu archivo se procesa en memoria y no se almacena en nuestros servidores.",
+    "dropzone": "Suelta tu PDF o hoja de cálculo aquí (máx. 10 MB)",
+    "uploadDocument": "Subir documento",
+    "removeDocument": "Eliminar documento",
+    "parsing": "Analizando documento...",
+    "documentReady": "{chars} caracteres listos para analizar",
+    "errors": {
+      "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo es {maxSize}.",
+      "unsupportedType": "Tipo de archivo no compatible. Sube un PDF o una hoja de cálculo (PDF, XLSX, CSV).",
+      "uploadFailed": "No se pudo subir el documento. Comprueba tu conexión e inténtalo de nuevo."
     },
-    "completion": "¡Gracias por compartir! Basándome en tu negocio de **{industry}** y tu enfoque en **{challenge}**, estoy listo para ayudar. Puedo asistirte con:\n\n• Planificación estratégica y hojas de ruta\n• Recomendaciones de optimización de procesos\n• Orientación en tecnología y sistemas\n• Mejores prácticas de implementación\n\n¿Qué te gustaría discutir?"
+    "samplePrompts": {
+      "summarize": "Resume este documento",
+      "keyNumbers": "¿Cuáles son las cifras clave?",
+      "actionItems": "Lista las acciones principales"
+    }
   },
   "dataTable": {
     "title": "Rastreador de Procesos",

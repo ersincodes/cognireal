@@ -1,10 +1,5 @@
 // Chat message types for the AI chatbot
 
-import type { WizardAnswer, WizardState } from "./wizard";
-
-// Re-export wizard types for convenience
-export type { WizardOption, WizardQuestion, WizardAnswer, WizardState } from "./wizard";
-
 export type MessageRole = "user" | "assistant" | "system";
 
 export interface ChatMessage {
@@ -14,11 +9,12 @@ export interface ChatMessage {
   timestamp: number;
   feedback?: "up" | "down" | null;
   isStreaming?: boolean;
+  streamPhase?: "reasoning" | "streaming";
 }
 
 export interface ChatApiRequest {
   messages: Pick<ChatMessage, "role" | "content">[];
-  wizardContext?: WizardAnswer[];
+  documentContext?: string;
 }
 
 export interface ChatApiResponse {
@@ -26,23 +22,32 @@ export interface ChatApiResponse {
   error?: string;
 }
 
+export interface DocumentAttachment {
+  filename: string;
+  mimeType: string;
+  extractedText: string;
+  charCount: number;
+  pageCount?: number;
+  sheetNames?: string[];
+}
+
 export interface ChatState {
   messages: ChatMessage[];
   isOpen: boolean;
   isLoading: boolean;
   error: string | null;
-  wizardState: WizardState;
+  documentAttachment: DocumentAttachment | null;
+  isParsingDocument: boolean;
 }
 
 export interface ChatContextValue extends ChatState {
   sendMessage: (content: string) => Promise<void>;
-  toggleChat: () => void;
-  openChat: () => void;
+  openDemoChat: () => void;
   closeChat: () => void;
   clearChat: () => void;
+  attachDocument: (file: File) => Promise<void>;
+  clearDocument: () => void;
   setFeedback: (messageId: string, feedback: "up" | "down" | null) => void;
-  answerWizardQuestion: (answerId: string, customValue?: string) => void;
-  resetWizard: () => void;
 }
 
 // Rate limiting types

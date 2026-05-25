@@ -107,82 +107,33 @@
     "close": "Modal schließen"
   },
   "chat": {
-    "title": "Business-Analyst-Assistent",
-    "statusReady": "Bereit zu helfen",
-    "statusOnboarding": "Lerne Sie kennen",
-    "placeholder": "Stellen Sie Ihre Frage...",
-    "footerText": "Bitte beantworten Sie die obigen Fragen, um fortzufahren",
-    "changeContext": "Kontext ändern",
+    "title": "KI-Dokumentenanalyse",
+    "statusReady": "Bereit, Ihr Dokument zu analysieren",
+    "placeholder": "Fragen Sie zu Ihrem Dokument...",
+    "ariaLabel": "KI-Dokumentenanalyse-Chat",
     "clearHistory": "Chat-Verlauf löschen",
     "closeChat": "Chat schließen",
-    "sendMessage": "Nachricht senden"
+    "sendMessage": "Nachricht senden",
+    "reasoning": "Ihr Dokument wird analysiert — dies kann 1–3 Minuten dauern..."
   },
-  "wizard": {
-    "intro": "Willkommen! Ich bin Ihr Business-Analyst-Assistent von Cognireal.\n\nUm Ihnen die relevanteste Beratung zu bieten, möchte ich etwas über Ihr Unternehmen erfahren. Beginnen wir mit ein paar kurzen Fragen.",
-    "stepProgress": "Schritt {current} von {total}",
-    "customInputLabel": "Bitte geben Sie Ihre Branche an:",
-    "customInputPlaceholder": "Geben Sie Ihre Branche ein...",
-    "continue": "Weiter",
-    "backToOptions": "← Zurück zu Optionen",
-    "questions": {
-      "industry": {
-        "question": "In welcher Branche ist Ihr Unternehmen tätig?",
-        "options": {
-          "manufacturing": "Fertigung",
-          "healthcare": "Gesundheitswesen",
-          "retail": "Einzelhandel / E-Commerce",
-          "finance": "Finanzen / Bankwesen",
-          "technology": "Technologie / SaaS",
-          "logistics": "Logistik / Lieferkette",
-          "other": "Andere"
-        }
-      },
-      "companySize": {
-        "question": "Wie groß ist Ihre Organisation?",
-        "options": {
-          "startup": "Startup (1-10 Mitarbeiter)",
-          "small": "Klein (11-50 Mitarbeiter)",
-          "medium": "Mittel (51-200 Mitarbeiter)",
-          "large": "Groß (201-1000 Mitarbeiter)",
-          "enterprise": "Unternehmen (1000+ Mitarbeiter)"
-        }
-      },
-      "challenge": {
-        "question": "Was ist Ihre größte geschäftliche Herausforderung?",
-        "options": {
-          "efficiency": "Betriebliche Effizienz",
-          "digital": "Digitale Transformation",
-          "cost": "Kostenreduzierung",
-          "quality": "Qualitätsverbesserung",
-          "customer": "Kundenerfahrung",
-          "analytics": "Daten & Analytik",
-          "automation": "Prozessautomatisierung"
-        }
-      },
-      "systems": {
-        "question": "Welche Systeme nutzen Sie derzeit?",
-        "options": {
-          "erp": "ERP (SAP, Oracle, etc.)",
-          "crm": "CRM (Salesforce, HubSpot)",
-          "custom": "Individuelle Software",
-          "spreadsheets": "Tabellenkalkulationen / Manuell",
-          "legacy": "Mehrere Altsysteme",
-          "none": "Keine / Neustart"
-        }
-      },
-      "goal": {
-        "question": "Welches Ergebnis möchten Sie erreichen?",
-        "options": {
-          "revenue": "Umsatz steigern",
-          "costs": "Kosten senken",
-          "efficiency": "Effizienz verbessern",
-          "decisions": "Bessere Entscheidungsfindung",
-          "competitive": "Wettbewerbsvorteil",
-          "compliance": "Compliance / Risikomanagement"
-        }
-      }
+  "demo": {
+    "welcome": "Willkommen zur KI-Dokumentenanalyse.\n\nLaden Sie ein PDF oder eine Tabelle (max. 10 MB) über das Büroklammer-Symbol hoch und stellen Sie dann Fragen zu Ihrer Datei.",
+    "privacy": "Ihre Datei wird im Arbeitsspeicher verarbeitet und nicht auf unseren Servern gespeichert.",
+    "dropzone": "PDF oder Tabelle hier ablegen (max. 10 MB)",
+    "uploadDocument": "Dokument hochladen",
+    "removeDocument": "Dokument entfernen",
+    "parsing": "Dokument wird analysiert...",
+    "documentReady": "{chars} Zeichen bereit zur Analyse",
+    "errors": {
+      "fileTooLarge": "Die Datei ist zu groß. Die maximale Größe beträgt {maxSize}.",
+      "unsupportedType": "Nicht unterstützter Dateityp. Laden Sie ein PDF oder eine Tabelle hoch (PDF, XLSX, CSV).",
+      "uploadFailed": "Dokument konnte nicht hochgeladen werden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut."
     },
-    "completion": "Danke fürs Teilen! Basierend auf Ihrem **{industry}**-Geschäft und Ihrem Fokus auf **{challenge}** bin ich bereit zu helfen. Ich kann Sie unterstützen bei:\n\n• Strategische Planung und Roadmaps\n• Empfehlungen zur Prozessoptimierung\n• Technologie- und Systemberatung\n• Best Practices für die Implementierung\n\nWas möchten Sie besprechen?"
+    "samplePrompts": {
+      "summarize": "Fasse dieses Dokument zusammen",
+      "keyNumbers": "Was sind die wichtigsten Zahlen?",
+      "actionItems": "Liste die wichtigsten Maßnahmen auf"
+    }
   },
   "dataTable": {
     "title": "Prozess-Tracker",

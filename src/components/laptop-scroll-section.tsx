@@ -194,6 +194,7 @@ export default function LaptopScrollSection() {
                   src="/assets/webapp-slider/before-2.png"
                   alt="Legacy spreadsheet interface before redesign"
                   fill
+                  sizes="(min-width: 1024px) 976px, calc(100vw - 5rem)"
                   className="object-contain object-top transition-all duration-700 ease-out"
                   priority
                 />

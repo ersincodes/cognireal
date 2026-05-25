@@ -1,7 +1,6 @@
 "use client";
 
 import { useChatContext } from "./ChatProvider";
-import ChatButton from "./ChatButton";
 import ChatWindow from "./ChatWindow";
 
 const ChatWidget = () => {
@@ -10,33 +9,31 @@ const ChatWidget = () => {
     isOpen,
     isLoading,
     error,
-    wizardState,
-    toggleChat,
+    documentAttachment,
+    isParsingDocument,
     closeChat,
     sendMessage,
     clearChat,
     setFeedback,
-    answerWizardQuestion,
-    resetWizard,
+    attachDocument,
+    clearDocument,
   } = useChatContext();
 
   return (
-    <>
-      <ChatWindow
-        isOpen={isOpen}
-        messages={messages}
-        isLoading={isLoading}
-        error={error}
-        wizardState={wizardState}
-        onClose={closeChat}
-        onSendMessage={sendMessage}
-        onClearChat={clearChat}
-        onFeedback={setFeedback}
-        onAnswerWizard={answerWizardQuestion}
-        onResetWizard={resetWizard}
-      />
-      <ChatButton isOpen={isOpen} onClick={toggleChat} />
-    </>
+    <ChatWindow
+      isOpen={isOpen}
+      messages={messages}
+      isLoading={isLoading}
+      error={error}
+      documentAttachment={documentAttachment}
+      isParsingDocument={isParsingDocument}
+      onClose={closeChat}
+      onSendMessage={sendMessage}
+      onClearChat={clearChat}
+      onFeedback={setFeedback}
+      onAttachDocument={attachDocument}
+      onClearDocument={clearDocument}
+    />
   );
 };
 

@@ -13,21 +13,20 @@ import type {
   ChatContextValue,
   ChatApiRequest,
   ChatApiResponse,
-  WizardState,
-  WizardAnswer,
+  DocumentAttachment,
 } from "@/types/chat";
-import { WIZARD_QUESTIONS } from "@/lib/wizard";
+import { chatDebug, chatError } from "@/lib/chat/debug";
+import { useLanguage } from "@/i18n/LanguageContext";
+import {
+  MAX_FILE_SIZE_LABEL,
+  validateUploadFile,
+  type UploadValidationError,
+} from "@/lib/demo/uploadLimits";
 
 const STORAGE_KEY = "cognireal-chat-data";
 
 const generateId = (): string => {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-};
-
-const initialWizardState: WizardState = {
-  isComplete: false,
-  currentStep: 0,
-  answers: [],
 };
 
 const ChatContext = createContext<ChatContextValue | null>(null);
@@ -46,32 +45,29 @@ interface ChatProviderProps {
 
 interface StoredChatData {
   messages: ChatMessage[];
-  wizardState: WizardState;
 }
 
 export const ChatProvider = ({ children }: ChatProviderProps) => {
+  const { t } = useLanguage();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [wizardState, setWizardState] = useState<WizardState>(initialWizardState);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [documentAttachment, setDocumentAttachment] =
+    useState<DocumentAttachment | null>(null);
+  const [isParsingDocument, setIsParsingDocument] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load data from localStorage on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as StoredChatData;
         if (parsed.messages && Array.isArray(parsed.messages)) {
-          // Filter out incomplete streaming messages and ensure all messages have content
           const validMessages = parsed.messages.filter(
             (msg) => msg && msg.id && msg.role && msg.content && !msg.isStreaming
           );
           setMessages(validMessages);
-        }
-        if (parsed.wizardState && typeof parsed.wizardState === "object") {
-          setWizardState(parsed.wizardState);
         }
       }
     } catch (e) {
@@ -80,26 +76,17 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     setIsHydrated(true);
   }, []);
 
-  // Save data to localStorage when they change
   useEffect(() => {
     if (!isHydrated) return;
     try {
-      const dataToStore: StoredChatData = {
-        messages,
-        wizardState,
-      };
+      const dataToStore: StoredChatData = { messages };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToStore));
     } catch (e) {
       console.warn("Failed to save chat data to localStorage:", e);
     }
-  }, [messages, wizardState, isHydrated]);
+  }, [messages, isHydrated]);
 
-  const toggleChat = useCallback(() => {
-    setIsOpen((prev) => !prev);
-    setError(null);
-  }, []);
-
-  const openChat = useCallback(() => {
+  const openDemoChat = useCallback(() => {
     setIsOpen(true);
     setError(null);
   }, []);
@@ -109,41 +96,84 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     setError(null);
   }, []);
 
+  const clearDocument = useCallback(() => {
+    setDocumentAttachment(null);
+  }, []);
+
   const clearChat = useCallback(() => {
     setMessages([]);
-    setWizardState(initialWizardState);
+    setDocumentAttachment(null);
     setError(null);
   }, []);
 
-  const answerWizardQuestion = useCallback(
-    (answerId: string, customValue?: string) => {
-      const currentQuestion = WIZARD_QUESTIONS[wizardState.currentStep];
-      if (!currentQuestion) return;
-
-      const answer: WizardAnswer = {
-        questionId: currentQuestion.id,
-        answerId,
-        customValue,
-      };
-
-      const newAnswers = [...wizardState.answers, answer];
-      const nextStep = wizardState.currentStep + 1;
-      const isComplete = nextStep >= WIZARD_QUESTIONS.length;
-
-      setWizardState({
-        isComplete,
-        currentStep: nextStep,
-        answers: newAnswers,
-      });
+  const getUploadValidationMessage = useCallback(
+    (error: UploadValidationError): string => {
+      if (error === "fileTooLarge") {
+        return t("demo.errors.fileTooLarge", { maxSize: MAX_FILE_SIZE_LABEL });
+      }
+      return t("demo.errors.unsupportedType");
     },
-    [wizardState.currentStep, wizardState.answers]
+    [t]
   );
 
-  const resetWizard = useCallback(() => {
-    setWizardState(initialWizardState);
-    setMessages([]);
+  const mapServerUploadError = useCallback(
+    (message: string): string => {
+      if (message.toLowerCase().includes("too large")) {
+        return t("demo.errors.fileTooLarge", { maxSize: MAX_FILE_SIZE_LABEL });
+      }
+      if (message.toLowerCase().includes("unsupported file type")) {
+        return t("demo.errors.unsupportedType");
+      }
+      return message;
+    },
+    [t]
+  );
+
+  const attachDocument = useCallback(async (file: File) => {
+    const validationError = validateUploadFile(file);
+    if (validationError) {
+      setError(getUploadValidationMessage(validationError));
+      return;
+    }
+
+    setIsParsingDocument(true);
     setError(null);
-  }, []);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/demo/parse", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = (await response.json()) as DocumentAttachment & { error?: string };
+
+      if (!response.ok || data.error) {
+        setError(
+          data.error
+            ? mapServerUploadError(data.error)
+            : t("demo.errors.uploadFailed")
+        );
+        return;
+      }
+
+      setDocumentAttachment({
+        filename: data.filename,
+        mimeType: data.mimeType,
+        extractedText: data.extractedText,
+        charCount: data.charCount,
+        pageCount: data.pageCount,
+        sheetNames: data.sheetNames,
+      });
+    } catch (e) {
+      console.error("Failed to attach document:", e);
+      setError(t("demo.errors.uploadFailed"));
+    } finally {
+      setIsParsingDocument(false);
+    }
+  }, [getUploadValidationMessage, mapServerUploadError, t]);
 
   const setFeedback = useCallback(
     (messageId: string, feedback: "up" | "down" | null) => {
@@ -160,7 +190,6 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     const trimmedContent = content.trim();
     if (!trimmedContent) return;
 
-    // Create user message
     const userMessage: ChatMessage = {
       id: generateId(),
       role: "user",
@@ -168,7 +197,6 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       timestamp: Date.now(),
     };
 
-    // Create placeholder assistant message for streaming
     const assistantMessageId = generateId();
     const assistantMessage: ChatMessage = {
       id: assistantMessageId,
@@ -183,7 +211,6 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     setError(null);
 
     try {
-      // Prepare messages for API (only user and assistant messages with content)
       const apiMessages = [...messages, userMessage]
         .filter((msg) => (msg.role === "user" || msg.role === "assistant") && msg.content)
         .map((msg) => ({
@@ -193,8 +220,14 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
       const requestBody: ChatApiRequest = {
         messages: apiMessages,
-        wizardContext: wizardState.answers,
+        documentContext: documentAttachment?.extractedText,
       };
+
+      chatDebug("client", "sending message", {
+        content: trimmedContent,
+        historyCount: apiMessages.length,
+        hasDocument: Boolean(documentAttachment?.extractedText),
+      });
 
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -204,11 +237,17 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
         body: JSON.stringify(requestBody),
       });
 
-      // Check if it's a streaming response
       const contentType = response.headers.get("content-type");
-      
+      const requestId = response.headers.get("x-chat-request-id");
+
+      chatDebug("client", "response received", {
+        requestId,
+        status: response.status,
+        contentType,
+        ok: response.ok,
+      });
+
       if (contentType?.includes("text/event-stream")) {
-        // Handle streaming response
         const reader = response.body?.getReader();
         if (!reader) {
           throw new Error("No response body");
@@ -219,48 +258,101 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
         let buffer = "";
         let receivedDone = false;
 
+        let eventCount = 0;
+        const streamStartedAt = Date.now();
+
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            chatDebug("client", "stream reader done", {
+              requestId,
+              eventCount,
+              accumulatedChars: accumulatedContent.length,
+              receivedDone,
+              ms: Date.now() - streamStartedAt,
+            });
+            break;
+          }
 
           buffer += decoder.decode(value, { stream: true });
-          
-          // Split by double newline to get complete SSE events
           const events = buffer.split(/\n\n/);
-          buffer = events.pop() || ""; // Keep incomplete event in buffer
+          buffer = events.pop() || "";
 
           for (const event of events) {
             const trimmedEvent = event.trim();
             if (!trimmedEvent) continue;
 
-            // Handle "data: {json}" format
             if (trimmedEvent.startsWith("data:")) {
               const jsonStr = trimmedEvent.slice(5).trim();
               if (!jsonStr) continue;
 
               try {
-                const data = JSON.parse(jsonStr);
-                
+                const data = JSON.parse(jsonStr) as {
+                  chunk?: string;
+                  replace?: boolean;
+                  done?: boolean;
+                  error?: string;
+                  meta?: { phase?: "reasoning" | "streaming" };
+                };
+                eventCount++;
+
+                if (eventCount <= 5 || eventCount % 25 === 0) {
+                  chatDebug("client", "sse event", {
+                    requestId,
+                    eventCount,
+                    keys: Object.keys(data),
+                    chunkPreview: data.chunk?.slice(0, 60),
+                    meta: data.meta,
+                    done: data.done,
+                    error: data.error,
+                  });
+                }
+
                 if (data.error) {
+                  chatError("client", "stream error event", {
+                    requestId,
+                    error: data.error,
+                  });
                   setError(data.error);
-                  // Remove the empty assistant message on error
                   setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
                   return;
                 }
 
+                if (data.meta?.phase === "reasoning") {
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === assistantMessageId
+                        ? { ...msg, streamPhase: "reasoning" }
+                        : msg
+                    )
+                  );
+                }
+
+                if (data.meta?.phase === "streaming") {
+                  setMessages((prev) =>
+                    prev.map((msg) =>
+                      msg.id === assistantMessageId
+                        ? { ...msg, streamPhase: "streaming" }
+                        : msg
+                    )
+                  );
+                }
+
                 if (data.replace) {
-                  // Replace entire content (for out-of-scope responses)
-                  accumulatedContent = data.chunk;
+                  accumulatedContent = data.chunk || "";
                 } else if (data.chunk) {
                   accumulatedContent += data.chunk;
                 }
 
                 if (data.chunk || data.replace) {
-                  // Update the assistant message with accumulated content
                   setMessages((prev) =>
                     prev.map((msg) =>
                       msg.id === assistantMessageId
-                        ? { ...msg, content: accumulatedContent }
+                        ? {
+                            ...msg,
+                            content: accumulatedContent,
+                            streamPhase: "streaming",
+                          }
                         : msg
                     )
                   );
@@ -268,24 +360,30 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
                 if (data.done) {
                   receivedDone = true;
-                  // Mark streaming as complete
                   setMessages((prev) =>
                     prev.map((msg) =>
                       msg.id === assistantMessageId
-                        ? { ...msg, isStreaming: false }
+                        ? { ...msg, isStreaming: false, streamPhase: undefined }
                         : msg
                     )
                   );
                 }
-              } catch {
-                // Skip invalid JSON
+              } catch (parseError) {
+                chatError("client", "failed to parse SSE JSON", {
+                  requestId,
+                  jsonStr: jsonStr.slice(0, 200),
+                  parseError,
+                });
               }
             }
           }
         }
 
-        // If stream ended without explicit done signal, mark as complete
         if (!receivedDone) {
+          chatDebug("client", "stream ended without done flag", {
+            requestId,
+            accumulatedChars: accumulatedContent.length,
+          });
           setMessages((prev) =>
             prev.map((msg) =>
               msg.id === assistantMessageId
@@ -295,23 +393,24 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
           );
         }
 
-        // If no content was received, show an error
         if (!accumulatedContent) {
+          chatError("client", "no content accumulated", { requestId });
           setError("Failed to get a response. Please try again.");
           setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
         }
       } else {
-        // Handle non-streaming response (error responses)
         const data: ChatApiResponse = await response.json();
 
         if (!response.ok || data.error) {
+          chatError("client", "non-stream error response", {
+            status: response.status,
+            error: data.error,
+          });
           setError(data.error || "Failed to get a response. Please try again.");
-          // Remove the empty assistant message on error
           setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
           return;
         }
 
-        // Update assistant message with full content
         setMessages((prev) =>
           prev.map((msg) =>
             msg.id === assistantMessageId
@@ -321,29 +420,28 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
         );
       }
     } catch (e) {
-      console.error("Failed to send message:", e);
+      chatError("client", "sendMessage failed", e);
       setError("Unable to connect. Please check your connection and try again.");
-      // Remove the empty assistant message on error
       setMessages((prev) => prev.filter((msg) => msg.id !== assistantMessageId));
     } finally {
       setIsLoading(false);
     }
-  }, [messages, wizardState.answers]);
+  }, [messages, documentAttachment?.extractedText]);
 
   const value: ChatContextValue = {
     messages,
     isOpen,
     isLoading,
     error,
-    wizardState,
+    documentAttachment,
+    isParsingDocument,
     sendMessage,
-    toggleChat,
-    openChat,
+    openDemoChat,
     closeChat,
     clearChat,
+    attachDocument,
+    clearDocument,
     setFeedback,
-    answerWizardQuestion,
-    resetWizard,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;

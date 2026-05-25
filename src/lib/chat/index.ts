@@ -1,18 +1,27 @@
-// Chat library exports
 export {
   getClientIdentifier,
   checkRateLimit,
+  checkUploadRateLimit,
   RATE_LIMIT_ERROR,
+  UPLOAD_RATE_LIMIT_ERROR,
 } from "./rateLimit";
 
 export {
-  convertToGeminiFormat,
-  buildGeminiRequestBody,
-  getGeminiApiUrl,
-  getGeminiStreamUrl,
-  extractGeminiResponse,
   isOutOfScopeResponse,
   OUT_OF_SCOPE_INDICATORS,
-  type GeminiContent,
-  type GeminiRequestBody,
 } from "./gemini";
+
+export {
+  createNvidiaClient,
+  buildNvidiaMessages,
+  getNvidiaModel,
+  NVIDIA_BASE_URL,
+  NVIDIA_GENERATION_CONFIG,
+} from "./nvidia";
+
+export { chatDebug, chatError, extractStreamDelta } from "./debug";
+
+export {
+  generateSystemPrompt,
+  OUT_OF_SCOPE_REFUSAL,
+} from "./systemPrompt";

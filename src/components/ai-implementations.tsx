@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
 import { Bot } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useChatContext } from "@/components/chat/ChatProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +18,7 @@ export default function AIImplementations() {
   const descRef = useRef<HTMLParagraphElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
+  const { openDemoChat } = useChatContext();
 
   useGSAP(
     () => {
@@ -32,7 +33,6 @@ export default function AIImplementations() {
         return;
       }
 
-      // Main pinning timeline matching WebPagesIntro
       const mainTl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -45,12 +45,10 @@ export default function AIImplementations() {
         },
       });
 
-      // Initial states
       gsap.set([labelRef.current, descRef.current], { opacity: 0, y: 30 });
       gsap.set(titleRef.current, { opacity: 0, y: 50 });
       gsap.set(buttonRef.current, { opacity: 0, scale: 0.8, y: 40 });
 
-      // Animation sequence
       mainTl
         .to(labelRef.current, { opacity: 1, y: 0, duration: 0.5 })
         .to(titleRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.3")
@@ -60,7 +58,7 @@ export default function AIImplementations() {
           { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" },
           "-=0.3"
         )
-        .to({}, { duration: 1 }); // Hold state
+        .to({}, { duration: 1 });
     },
     { scope: sectionRef }
   );
@@ -93,16 +91,15 @@ export default function AIImplementations() {
         </div>
 
         <div ref={buttonRef} className="mt-16 flex justify-start md:mt-32">
-          <Link
-            href="https://www.sustainnery.com/"
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={openDemoChat}
             className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
             aria-label={t("aiSystems.button")}
           >
             <span>{t("aiSystems.button")}</span>
             <Bot className="h-5 w-5" aria-hidden="true" />
-          </Link>
+          </button>
         </div>
       </div>
     </section>

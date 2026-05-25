@@ -2,6 +2,7 @@
 
 import { ThumbsUp, ThumbsDown, Bot, User } from "lucide-react";
 import type { ChatMessage as ChatMessageType } from "@/types/chat";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -9,9 +10,11 @@ interface ChatMessageProps {
 }
 
 const ChatMessage = ({ message, onFeedback }: ChatMessageProps) => {
+  const { t } = useLanguage();
   const isUser = message.role === "user";
   const isAssistant = message.role === "assistant";
   const isStreaming = message.isStreaming && isAssistant;
+  const isReasoning = isStreaming && message.streamPhase === "reasoning";
   const content = message.content || "";
   const hasContent = content.length > 0;
 
@@ -59,22 +62,41 @@ const ChatMessage = ({ message, onFeedback }: ChatMessageProps) => {
           } ${isStreaming && !hasContent ? "min-h-[40px] min-w-[60px]" : ""}`}
         >
           {isStreaming && !hasContent ? (
-            // Show typing dots when streaming but no content yet
-            <div className="flex items-center justify-center gap-1.5 py-1">
-              <span
-                className="typing-dot h-2 w-2 rounded-full bg-gray-400"
-                style={{ animationDelay: "0ms" }}
-              />
-              <span
-                className="typing-dot h-2 w-2 rounded-full bg-gray-400"
-                style={{ animationDelay: "160ms" }}
-              />
-              <span
-                className="typing-dot h-2 w-2 rounded-full bg-gray-400"
-                style={{ animationDelay: "320ms" }}
-              />
-              <span className="sr-only">Assistant is typing...</span>
-            </div>
+            isReasoning ? (
+              <div className="flex flex-col gap-1 py-1">
+                <div className="flex items-center gap-1.5">
+                  <span
+                    className="typing-dot h-2 w-2 rounded-full bg-brand-blue/60"
+                    style={{ animationDelay: "0ms" }}
+                  />
+                  <span
+                    className="typing-dot h-2 w-2 rounded-full bg-brand-blue/60"
+                    style={{ animationDelay: "160ms" }}
+                  />
+                  <span
+                    className="typing-dot h-2 w-2 rounded-full bg-brand-blue/60"
+                    style={{ animationDelay: "320ms" }}
+                  />
+                </div>
+                <p className="text-xs text-gray-500">{t("chat.reasoning")}</p>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-1.5 py-1">
+                <span
+                  className="typing-dot h-2 w-2 rounded-full bg-gray-400"
+                  style={{ animationDelay: "0ms" }}
+                />
+                <span
+                  className="typing-dot h-2 w-2 rounded-full bg-gray-400"
+                  style={{ animationDelay: "160ms" }}
+                />
+                <span
+                  className="typing-dot h-2 w-2 rounded-full bg-gray-400"
+                  style={{ animationDelay: "320ms" }}
+                />
+                <span className="sr-only">Assistant is typing...</span>
+              </div>
+            )
           ) : (
             <p className="whitespace-pre-wrap text-sm leading-relaxed">
               {content}

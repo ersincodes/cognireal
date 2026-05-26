@@ -12,9 +12,12 @@ export interface ChatMessage {
   streamPhase?: "reasoning" | "streaming";
 }
 
+export type ChatMode = "site" | "demo";
+
 export interface ChatApiRequest {
   messages: Pick<ChatMessage, "role" | "content">[];
   documentContext?: string;
+  mode?: ChatMode;
 }
 
 export interface ChatApiResponse {

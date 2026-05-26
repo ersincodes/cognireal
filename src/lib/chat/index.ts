@@ -24,4 +24,7 @@ export { chatDebug, chatError, extractStreamDelta } from "./debug";
 export {
   generateSystemPrompt,
   OUT_OF_SCOPE_REFUSAL,
+  BOOK_A_CALL_REFUSAL,
 } from "./systemPrompt";
+
+export { renderMessageWithLinks } from "./renderMessageLinks";

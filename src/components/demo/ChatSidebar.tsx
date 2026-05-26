@@ -184,7 +184,7 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
           >
             <div className="relative h-11 w-40 overflow-hidden">
               <Image
-                src="/assets/logo-nav.png"
+                src="/assets/logo-navbar.png"
                 alt=""
                 width={320}
                 height={64}
@@ -193,7 +193,7 @@ const ChatSidebar = ({ className = "" }: ChatSidebarProps) => {
               />
             </div>
           </Link>
-          <p className="pl-4 text-xs font-medium uppercase tracking-wider text-gray-500">
+          <p className="pl-4 mt-5 text-xs font-medium uppercase tracking-wider text-gray-500">
             {t("demoPage.title")}
           </p>
         </div>

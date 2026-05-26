@@ -28,7 +28,7 @@ const Navbar = () => {
             alt={t("navbar.logoAlt")}
             width={200}
             height={64}
-            className="h-auto w-32 md:w-40"
+            className="h-auto w-auto md:w-40"
             priority
           />
         </Link>
@@ -48,7 +48,7 @@ const Navbar = () => {
           <LanguageSwitcher />
           <Link
             href={bookingUrl}
-            className="mt-0 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-2 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="mt-0 inline-block rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-8 py-1 text-md font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
             aria-label="Schedule a call"
           >
             {t("navbar.bookCall")}

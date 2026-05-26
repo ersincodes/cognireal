@@ -121,6 +121,7 @@
     "privacy": "Ihre Datei wird im Arbeitsspeicher verarbeitet und nicht auf unseren Servern gespeichert.",
     "dropzone": "PDF oder Tabelle hier ablegen (max. 10 MB)",
     "uploadDocument": "Dokument hochladen",
+    "changeDocument": "Datei ändern",
     "removeDocument": "Dokument entfernen",
     "parsing": "Dokument wird analysiert...",
     "documentReady": "{chars} Zeichen bereit zur Analyse",
@@ -133,6 +134,35 @@
       "summarize": "Fasse dieses Dokument zusammen",
       "keyNumbers": "Was sind die wichtigsten Zahlen?",
       "actionItems": "Liste die wichtigsten Maßnahmen auf"
+    }
+  },
+  "demoPage": {
+    "title": "Dokumentenanalyse",
+    "newChat": "Neuer Chat",
+    "previousChats": "Frühere Chats",
+    "deleteChat": "Chat löschen",
+    "chatEmpty": "Noch keine Nachrichten",
+    "noChats": "Keine früheren Chats",
+    "confirmDelete": "Löschen",
+    "cancelDelete": "Abbrechen",
+    "openSidebar": "Chat-Verlauf öffnen",
+    "closeSidebar": "Chat-Verlauf schließen",
+    "empty": {
+      "uploadCTA": "Laden Sie ein Dokument hoch, um zu starten",
+      "supportedTypes": "PDF, XLSX oder CSV — max. 10 MB. Ihre Datei bleibt in diesem Browser.",
+      "dragHint": "oder Datei hier ablegen"
+    },
+    "analyzingHint": "Text wird extrahiert und Vorschläge vorbereitet. Dies kann einige Sekunden dauern.",
+    "suggestionsLabel": "Vorgeschlagene Fragen",
+    "suggestions": {
+      "loading": "Vorschläge werden erstellt...",
+      "fallback": "Welche Muster zeigen sich in diesen Daten?"
+    },
+    "modal": {
+      "prefix": "Für eine detailliertere Analyse und ein besseres Erlebnis bitte",
+      "bookACall": "Termin buchen",
+      "middle": ", oder",
+      "skip": "Überspringen"
     }
   },
   "dataTable": {

@@ -121,6 +121,7 @@
     "privacy": "Your file is processed in memory and is not stored on our servers.",
     "dropzone": "Drop your PDF or spreadsheet here (max 10 MB)",
     "uploadDocument": "Upload document",
+    "changeDocument": "Change file",
     "removeDocument": "Remove document",
     "parsing": "Analyzing document...",
     "documentReady": "{chars} characters ready for analysis",
@@ -133,6 +134,35 @@
       "summarize": "Summarize this document",
       "keyNumbers": "What are the key numbers?",
       "actionItems": "List the main action items"
+    }
+  },
+  "demoPage": {
+    "title": "Document Analyzer",
+    "newChat": "New chat",
+    "previousChats": "Previous chats",
+    "deleteChat": "Delete chat",
+    "chatEmpty": "No messages yet",
+    "noChats": "No previous chats",
+    "confirmDelete": "Delete",
+    "cancelDelete": "Cancel",
+    "openSidebar": "Open chat history",
+    "closeSidebar": "Close chat history",
+    "empty": {
+      "uploadCTA": "Upload a document to get started",
+      "supportedTypes": "PDF, XLSX, or CSV — max 10 MB. Your file stays in this browser.",
+      "dragHint": "or drag and drop a file here"
+    },
+    "analyzingHint": "Extracting text and preparing suggested questions. This may take a few seconds.",
+    "suggestionsLabel": "Suggested questions",
+    "suggestions": {
+      "loading": "Generating suggestions...",
+      "fallback": "What patterns appear in this data?"
+    },
+    "modal": {
+      "prefix": "For more detailed analysis and experience please",
+      "bookACall": "Book a Call",
+      "middle": ", or",
+      "skip": "Skip"
     }
   },
   "dataTable": {

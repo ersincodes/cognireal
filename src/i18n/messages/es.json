@@ -121,6 +121,7 @@
     "privacy": "Tu archivo se procesa en memoria y no se almacena en nuestros servidores.",
     "dropzone": "Suelta tu PDF o hoja de cálculo aquí (máx. 10 MB)",
     "uploadDocument": "Subir documento",
+    "changeDocument": "Cambiar archivo",
     "removeDocument": "Eliminar documento",
     "parsing": "Analizando documento...",
     "documentReady": "{chars} caracteres listos para analizar",
@@ -133,6 +134,35 @@
       "summarize": "Resume este documento",
       "keyNumbers": "¿Cuáles son las cifras clave?",
       "actionItems": "Lista las acciones principales"
+    }
+  },
+  "demoPage": {
+    "title": "Analizador de documentos",
+    "newChat": "Nuevo chat",
+    "previousChats": "Chats anteriores",
+    "deleteChat": "Eliminar chat",
+    "chatEmpty": "Sin mensajes aún",
+    "noChats": "No hay chats anteriores",
+    "confirmDelete": "Eliminar",
+    "cancelDelete": "Cancelar",
+    "openSidebar": "Abrir historial de chats",
+    "closeSidebar": "Cerrar historial de chats",
+    "empty": {
+      "uploadCTA": "Sube un documento para empezar",
+      "supportedTypes": "PDF, XLSX o CSV — máx. 10 MB. Tu archivo permanece en este navegador.",
+      "dragHint": "o arrastra y suelta un archivo aquí"
+    },
+    "analyzingHint": "Extrayendo texto y preparando preguntas sugeridas. Puede tardar unos segundos.",
+    "suggestionsLabel": "Preguntas sugeridas",
+    "suggestions": {
+      "loading": "Generando sugerencias...",
+      "fallback": "¿Qué patrones aparecen en estos datos?"
+    },
+    "modal": {
+      "prefix": "Para un análisis más detallado y una mejor experiencia, por favor",
+      "bookACall": "Reserva una llamada",
+      "middle": ", o",
+      "skip": "Omitir"
     }
   },
   "dataTable": {

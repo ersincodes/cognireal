@@ -1,23 +1,14 @@
 "use client";
 
 import { useLanguage } from "@/i18n/LanguageContext";
-
-declare global {
-  interface Window {
-    Calendly: any;
-  }
-}
+import { openCalendlyPopup } from "@/lib/demo/calendly";
 
 export default function Mission() {
   const { t } = useLanguage();
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (window.Calendly) {
-      window.Calendly.initPopupWidget({
-        url: "https://calendly.com/realcogni/30min",
-      });
-    }
+    openCalendlyPopup();
   };
 
   return (

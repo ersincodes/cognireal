@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { ChatProvider } from "./ChatProvider";
 
 const ChatWidget = dynamic(() => import("./ChatWidget"), {
@@ -13,10 +14,13 @@ interface ChatShellProps {
 }
 
 const ChatShell = ({ children }: ChatShellProps) => {
+  const pathname = usePathname();
+  const isDemoPage = pathname?.startsWith("/demo");
+
   return (
     <ChatProvider>
       {children}
-      <ChatWidget />
+      {!isDemoPage && <ChatWidget />}
     </ChatProvider>
   );
 };

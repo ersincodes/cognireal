@@ -141,7 +141,7 @@ const LanguageSwitcher = () => {
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-label={t("languageSwitcher.label")}
-        className="flex items-center gap-1.5 text-sm font-medium text-brand-muted transition-colors duration-200 hover:text-brand-dark focus-visible:outline-none focus-visible:text-brand-dark"
+        className="flex cursor-pointer items-center gap-1.5 text-sm font-medium text-brand-muted transition-colors duration-200 hover:text-brand-dark focus-visible:outline-none focus-visible:text-brand-dark"
       >
         <FlagIcon locale={locale} className="h-4 w-5 rounded-sm shadow-sm" />
         <span>{localeShortCodes[locale]}</span>
@@ -167,7 +167,7 @@ const LanguageSwitcher = () => {
               role="option"
               aria-selected={isSelected}
               onClick={() => handleSelect(localeOption)}
-              className={`flex w-full items-center justify-center rounded-md px-2.5 py-1.5 transition-colors duration-150 ${
+              className={`flex w-full cursor-pointer items-center justify-center rounded-md px-2.5 py-1.5 transition-colors duration-150 ${
                 isSelected
                   ? "bg-brand-blue/10"
                   : "hover:bg-gray-50"

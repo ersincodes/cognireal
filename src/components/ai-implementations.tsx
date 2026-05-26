@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 import { Bot } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
-import { useChatContext } from "@/components/chat/ChatProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,7 +18,6 @@ export default function AIImplementations() {
   const descRef = useRef<HTMLParagraphElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
-  const { openDemoChat } = useChatContext();
 
   useGSAP(
     () => {
@@ -91,15 +90,14 @@ export default function AIImplementations() {
         </div>
 
         <div ref={buttonRef} className="mt-16 flex justify-start md:mt-32">
-          <button
-            type="button"
-            onClick={openDemoChat}
+          <Link
+            href="/demo"
             className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
             aria-label={t("aiSystems.button")}
           >
             <span>{t("aiSystems.button")}</span>
             <Bot className="h-5 w-5" aria-hidden="true" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

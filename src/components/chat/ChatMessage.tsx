@@ -3,6 +3,7 @@
 import { ThumbsUp, ThumbsDown, Bot, User } from "lucide-react";
 import type { ChatMessage as ChatMessageType } from "@/types/chat";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { renderMessageWithLinks } from "@/lib/chat/renderMessageLinks";
 
 interface ChatMessageProps {
   message: ChatMessageType;
@@ -99,7 +100,7 @@ const ChatMessage = ({ message, onFeedback }: ChatMessageProps) => {
             )
           ) : (
             <p className="whitespace-pre-wrap text-sm leading-relaxed">
-              {content}
+              {renderMessageWithLinks(content)}
               {isStreaming && hasContent && (
                 <span className="typing-cursor ml-0.5 inline-block h-4 w-0.5 bg-brand-dark align-middle" />
               )}

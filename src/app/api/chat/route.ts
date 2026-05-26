@@ -7,6 +7,7 @@ import {
   isOutOfScopeResponse,
   generateSystemPrompt,
   OUT_OF_SCOPE_REFUSAL,
+  BOOK_A_CALL_REFUSAL,
 } from "@/lib/chat";
 import {
   createNvidiaClient,
@@ -73,8 +74,9 @@ export async function POST(request: NextRequest) {
     }
 
     const model = getNvidiaModel();
+    const chatMode = body.mode === "demo" ? "demo" : "site";
     const hasDocument = Boolean(body.documentContext?.trim());
-    const systemPrompt = generateSystemPrompt(body.documentContext);
+    const systemPrompt = generateSystemPrompt(body.documentContext, chatMode);
 
     chatDebug("api", `request ${requestId} calling NVIDIA`, {
       model,
@@ -228,11 +230,18 @@ export async function POST(request: NextRequest) {
             return;
           }
 
+          const refusalMessage =
+            chatMode === "demo" ? BOOK_A_CALL_REFUSAL : OUT_OF_SCOPE_REFUSAL;
+
           if (
-            isOutOfScopeResponse(fullMessage) &&
-            fullMessage !== OUT_OF_SCOPE_REFUSAL
+            (isOutOfScopeResponse(fullMessage) ||
+              (chatMode === "demo" &&
+                /not in the document|cannot find|don't have.*information/i.test(
+                  fullMessage
+                ))) &&
+            fullMessage !== refusalMessage
           ) {
-            enqueue({ chunk: OUT_OF_SCOPE_REFUSAL, replace: true });
+            enqueue({ chunk: refusalMessage, replace: true });
           }
 
           enqueue({ done: true });

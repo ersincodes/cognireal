@@ -6,9 +6,13 @@ import { useLanguage } from "@/i18n/LanguageContext";
 export default function Footer() {
   const { t } = useLanguage();
   const socialNetworks = [
-    { key: "linkedin", label: t("footer.linkedin") },
-    { key: "twitter", label: t("footer.twitter") },
-    { key: "instagram", label: t("footer.instagram") },
+    {
+      key: "linkedin",
+      label: t("footer.linkedin"),
+      href: "https://www.linkedin.com/company/cognireal/",
+    },
+    { key: "twitter", label: t("footer.twitter"), href: "#" },
+    { key: "instagram", label: t("footer.instagram"), href: "#" },
   ];
 
   return (
@@ -23,7 +27,10 @@ export default function Footer() {
           {socialNetworks.map((network) => (
             <Link
               key={network.key}
-              href="#"
+              href={network.href}
+              {...(network.href.startsWith("http")
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
               className="text-brand-muted transition hover:text-brand-dark">
               {network.label}
             </Link>

@@ -144,7 +144,7 @@ export default function LaptopScrollSection() {
             type="button"
             aria-label="See a real case web app transformation"
             onClick={handleOpenCaseModal}
-            className="mt-8 cursor-pointer inline-block rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2">
+            className="mt-8 inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-6 py-2.5 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 sm:px-8 sm:py-3 sm:text-base md:text-lg">
             {t("webApps.button")}
           </button>
         </div>

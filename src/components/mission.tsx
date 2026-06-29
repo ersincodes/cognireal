@@ -22,7 +22,7 @@ export default function Mission() {
         </p>
         <button
           onClick={handleClick}
-          className="mt-8 inline-block cursor-pointer rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl">
+          className="mt-8 inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-6 py-2.5 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl sm:px-8 sm:py-3 sm:text-base md:text-lg">
           {t("mission.button")}
         </button>
       </div>

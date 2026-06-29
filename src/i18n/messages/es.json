@@ -8,7 +8,10 @@
     "services": "Servicios",
     "contact": "Contacto",
     "bookCall": "Reservar Llamada",
-    "logoAlt": "Logo de Cognireal"
+    "logoAlt": "Logo de Cognireal",
+    "openMenu": "Abrir menú de navegación",
+    "closeMenu": "Cerrar menú de navegación",
+    "menuTitle": "Menú"
   },
   "hero": {
     "heading": "La transformación digital",

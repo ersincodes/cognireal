@@ -92,7 +92,7 @@ export default function AIImplementations() {
         <div ref={buttonRef} className="mt-16 flex justify-start md:mt-32">
           <Link
             href="/demo"
-            className="inline-flex items-center gap-2 rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-10 py-3 text-lg font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
+            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-linear-to-r from-brand-cyan to-brand-blue px-6 py-2.5 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 sm:px-8 sm:py-3 sm:text-base md:text-lg"
             aria-label={t("aiSystems.button")}
           >
             <span>{t("aiSystems.button")}</span>

@@ -1,4 +1,4 @@
-export const CALENDLY_URL = "https://calendly.com/realcogni/30min";
+export const CALENDLY_URL = "https://calendly.com/ersin-cognireal/30min";
 
 declare global {
   interface Window {
@@ -9,7 +9,14 @@ declare global {
 }
 
 export const openCalendlyPopup = (): void => {
-  if (typeof window !== "undefined" && window.Calendly) {
-    window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+  if (typeof window === "undefined") {
+    return;
   }
+
+  if (window.Calendly) {
+    window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+    return;
+  }
+
+  window.open(CALENDLY_URL, "_blank", "noopener,noreferrer");
 };

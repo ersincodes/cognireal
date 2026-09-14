@@ -170,6 +170,8 @@ const MobileNavDrawer = ({
         <div className="border-t border-brand-dark/10 px-6 py-6">
           <Link
             href={bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={handleNavClick}
             className="inline-flex w-full shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
           >

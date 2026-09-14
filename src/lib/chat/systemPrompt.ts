@@ -3,12 +3,13 @@
  */
 
 import type { ChatMode } from "@/types/chat";
+import { CALENDLY_URL } from "@/lib/demo/calendly";
 
 export const OUT_OF_SCOPE_REFUSAL =
   "Sorry, this is not a related topic of the conversation.";
 
 export const BOOK_A_CALL_REFUSAL =
-  "For more detailed analysis and experience please [Book a Call](https://calendly.com/realcogni/30min)";
+  `For more detailed analysis and experience please [Book a Call](${CALENDLY_URL})`;
 
 const SITE_BASE_PROMPT = `You are Cognireal's AI Document Analyzer. You help users understand uploaded documents (PDFs, spreadsheets, CSV files).
 

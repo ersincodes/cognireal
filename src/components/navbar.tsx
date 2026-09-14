@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { CALENDLY_URL } from "@/lib/demo/calendly";
 import LanguageSwitcher from "./language-switcher";
 import MobileNavDrawer from "./mobile-nav-drawer";
 
@@ -20,7 +21,7 @@ const Navbar = () => {
     { label: t("navbar.contact"), href: "/#contact" },
   ];
 
-  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL || "/#contact";
+  const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL || CALENDLY_URL;
 
   const handleOpenMenu = () => setIsMenuOpen(true);
   const handleCloseMenu = () => setIsMenuOpen(false);
@@ -68,6 +69,8 @@ const Navbar = () => {
           <LanguageSwitcher />
           <Link
             href={bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-gradient-to-r from-brand-cyan to-brand-blue px-3 py-1.5 text-xs font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 sm:px-4 sm:py-1.5 sm:text-sm"
             aria-label="Schedule a call"
           >

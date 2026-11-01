@@ -12,7 +12,7 @@ export default function Process() {
   const words = processText.split(" ");
 
   // Define which words should have special styling (based on position/content)
-  const getWordClassName = (word: string, index: number): string => {
+  const getWordClassName = (word: string): string => {
     const lowerWord = word.toLowerCase().replace(/[,.]/, "");
     if (lowerWord === "modernize" || lowerWord === "modernizarse" || lowerWord === "modernisieren") {
       return "text-brand-cyan";
@@ -74,7 +74,7 @@ export default function Process() {
           <span
             key={index}
             className={`word inline-block translate-y-4 opacity-0 transition-all duration-500 ease-out ${
-              getWordClassName(word, index)
+              getWordClassName(word)
             }`}
             style={{ transitionDelay: `${index * 60}ms` }}
           >

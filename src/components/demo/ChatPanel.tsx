@@ -58,7 +58,7 @@ const ChatPanel = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isLoading, document, scrollToBottom]);
+  }, [activeChat?.messages, isLoading, document, scrollToBottom]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();

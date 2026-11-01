@@ -67,6 +67,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
           const validMessages = parsed.messages.filter(
             (msg) => msg && msg.id && msg.role && msg.content && !msg.isStreaming
           );
+          // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage is client-only; reading it during render would cause a hydration mismatch
           setMessages(validMessages);
         }
       }
@@ -186,6 +187,8 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     []
   );
 
+  const documentContext = documentAttachment?.extractedText;
+
   const sendMessage = useCallback(async (content: string) => {
     const trimmedContent = content.trim();
     if (!trimmedContent) return;
@@ -220,13 +223,13 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
       const requestBody: ChatApiRequest = {
         messages: apiMessages,
-        documentContext: documentAttachment?.extractedText,
+        documentContext,
       };
 
       chatDebug("client", "sending message", {
         content: trimmedContent,
         historyCount: apiMessages.length,
-        hasDocument: Boolean(documentAttachment?.extractedText),
+        hasDocument: Boolean(documentContext),
       });
 
       const response = await fetch("/api/chat", {
@@ -426,7 +429,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, documentAttachment?.extractedText]);
+  }, [messages, documentContext]);
 
   const value: ChatContextValue = {
     messages,

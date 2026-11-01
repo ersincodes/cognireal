@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { GripVertical } from "lucide-react";
 
@@ -34,6 +34,13 @@ const BeforeAfterSlider = ({
     clamp(initialPositionPercent, 0, 100)
   );
   const [isDragging, setIsDragging] = useState(false);
+  const [prevInitialPositionPercent, setPrevInitialPositionPercent] =
+    useState(initialPositionPercent);
+
+  if (initialPositionPercent !== prevInitialPositionPercent) {
+    setPrevInitialPositionPercent(initialPositionPercent);
+    setSliderPositionPercent(clamp(initialPositionPercent, 0, 100));
+  }
 
   const clipPath = useMemo(
     () => `inset(0 ${100 - sliderPositionPercent}% 0 0)`,
@@ -95,10 +102,6 @@ const BeforeAfterSlider = ({
       setSliderPositionPercent(100);
     }
   };
-
-  useEffect(() => {
-    setSliderPositionPercent(clamp(initialPositionPercent, 0, 100));
-  }, [initialPositionPercent]);
 
   const renderImage = (src: string, alt: string) => (
     <div className="relative h-full w-full">

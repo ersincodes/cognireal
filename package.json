@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "overrides": {
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.23"
   },
   "scripts": {
     "dev": "next dev",
@@ -17,7 +17,7 @@
     "gsap": "^3.13.0",
     "hucre": "^0.5.1",
     "lucide-react": "^0.555.0",
-    "next": "^16.1.6",
+    "next": "^16.4.3",
     "next-intl": "^4.8.2",
     "openai": "^6.39.0",
     "react": "19.2.1",
@@ -29,9 +29,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "baseline-browser-mapping": "^2.9.19",
+    "baseline-browser-mapping": "^2.11.34",
     "eslint": "^9",
-    "eslint-config-next": "16.2.5",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

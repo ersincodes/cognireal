@@ -173,6 +173,7 @@ export const DemoProvider = ({ children }: DemoProviderProps) => {
       const chat = createNewChat();
       dispatch({ type: "CREATE_CHAT", chat });
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage is client-only; reading it during render would cause a hydration mismatch
     setIsHydrated(true);
   }, []);
 

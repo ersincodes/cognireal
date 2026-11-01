@@ -47,6 +47,7 @@ export const LanguageProvider = ({ children }: LanguageProviderProps) => {
   useEffect(() => {
     const storedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as Locale;
     if (storedLocale && locales.includes(storedLocale)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage is client-only; reading it during render would cause a hydration mismatch
       setLocaleState(storedLocale);
     } else {
       // Try to detect browser language
